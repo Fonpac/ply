@@ -17,11 +17,18 @@ reserved_words = {
 }
 
 tokens = ['IDENTIFIER', 'MINUS', 'EQUALS', 'COLON', 'REL_OP', 'AND_OR',
-          'NUMBER_OP', 'OPEN_PAR', 'CLOSE_PAR', 'NUM'] + list(reserved_words.values())
+          'TIMES', 'PLUS', 'DIVIDE', 'OPEN_PAR', 'CLOSE_PAR', 'NUM'] + list(reserved_words.values())
+
+precedence = (
+     ('left', 'PLUS', 'MINUS'),
+     ('left', 'TIMES', 'DIVIDE'),
+)
 
 # Ignored characters
 t_ignore = ' \t'
-t_NUMBER_OP = '\+|\*|/'
+t_PLUS = '\+'
+t_TIMES = '\*'
+t_DIVIDE = '\/'
 t_AND_OR = '\&&|\|\|'
 t_REL_OP = '\==|\<=|>=|!=|>|<'
 t_MINUS = '-'
@@ -92,7 +99,7 @@ def p_program(p):
     append_node(node, p[1])
     if p[2]:
         append_node(node, p[2])
-    p[0] = node
+    p[0] = p[1]
 
 
 def p_statement(p):
@@ -101,7 +108,7 @@ def p_statement(p):
     '''
     node = new_node("statement")
     append_node(node, p[1])
-    p[0] = node
+    p[0] = p[1]
 
 
 def p_assign(p):
@@ -110,6 +117,10 @@ def p_assign(p):
     append_node(node, new_leaf("SET " + p.slice[1].type, value=p[1]))
     append_node(node, new_leaf(p.slice[2].type, value=p[2]))
     append_node(node, p[3])
+    # symbol_table["identifier"] = {
+    #     tyé: var
+    #     name: p[1]
+    # }
     p[0] = node
 
 
@@ -134,7 +145,7 @@ def p_expression(p):
     '''
     node = new_node("expression")
     append_node(node, p[1])
-    p[0] = node
+    p[0] = p[1]
 
 
 def p_bool_expression_bool(p):
@@ -188,12 +199,18 @@ def p_bool_expression_identifier(p):
 
 
 def p_num_expression(p):
-    '''num_expression : num_expression NUMBER_OP num_expression'''
+    '''num_expression : num_expression PLUS num_expression
+                      | num_expression TIMES num_expression
+                      | num_expression DIVIDE num_expression
+    '''
     node = new_node("num_expression")
     append_node(node, p[1])
     append_node(node, new_leaf(p.slice[2].type, value=p[2]))
     append_node(node, p[3])
-    p[0] = node
+    p[0] = p[1] + p[3] + [{
+            "+": "ADD",
+            "*": "MUL"
+        }[p[2]]]
 
 
 def p_num_expression_parenthesis(p):
@@ -217,7 +234,7 @@ def p_num_expression_num(p):
     '''num_expression : NUM'''
     node = new_node("num_expression")
     append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    p[0] = node
+    p[0] = [f"push {p[1]}"]
 
 
 def p_num_expression_identifier(p):
@@ -307,8 +324,16 @@ lexer = lex()
 parser = yacc()
 
 ast = parser.parse('''
-                    IF (5 > 10) THEN 5 + 10 ELSE 10 * 5 END END
+                    2 + 3 * 4
                    ''',
                    lexer=lexer, tracking=False)
 
-print(yaml.dump(ast, sort_keys=False, indent=2))
+start = [':START __main__']
+data = ['.DATA']
+# for each symbol in symbol_table
+# if (symbol.type == var) {
+#     data.append(symbol.name)
+# }
+code = ['.CODE', 'def __main__:']
+tudo = start + data + code + ast
+print(yaml.dump(tudo, sort_keys=False, indent=2))

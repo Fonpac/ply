@@ -1,0 +1,34 @@
+b = 3
+a = :b ^ 2
+c = 4 * (:a   :b)
+WRITE :c "\n"
+
+
+
+----- ASM ----
+.START __main__
+  
+.DATA
+  b        3
+  a        0
+  c        0
+  
+.CODE
+DEF __main__:
+  PUSH 3
+  STOR b
+  LOAD b
+  PUSH 2
+  POW
+  STOR a
+  PUSH 4
+  LOAD a
+  LOAD b
+  ADD
+  MUL
+  STOR c
+  LOAD c
+  PUSH "\n"
+  PUSH 2
+  CALL WRITE
+  HALT
