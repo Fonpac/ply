@@ -20,8 +20,8 @@ tokens = ['IDENTIFIER', 'MINUS', 'EQUALS', 'COLON', 'REL_OP', 'AND_OR',
           'TIMES', 'PLUS', 'DIVIDE', 'OPEN_PAR', 'CLOSE_PAR', 'NUM'] + list(reserved_words.values())
 
 precedence = (
-     ('left', 'PLUS', 'MINUS'),
-     ('left', 'TIMES', 'DIVIDE'),
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'TIMES', 'DIVIDE'),
 )
 
 # Ignored characters
@@ -113,15 +113,15 @@ def p_statement(p):
 
 def p_assign(p):
     '''assign : IDENTIFIER EQUALS expression'''
-    node = new_node("assign")
-    append_node(node, new_leaf("SET " + p.slice[1].type, value=p[1]))
-    append_node(node, new_leaf(p.slice[2].type, value=p[2]))
-    append_node(node, p[3])
-    # symbol_table["identifier"] = {
-    #     tyé: var
-    #     name: p[1]
-    # }
-    p[0] = node
+    # node = new_node("assign")
+    # append_node(node, new_leaf("SET " + p.slice[1].type, value=p[1]))
+    # append_node(node, new_leaf(p.slice[2].type, value=p[2]))
+    # append_node(node, p[3])
+    symbol_table[p[1]] = {
+        "id_type": "var",
+        "value": re.findall('[0-9]+', p[3][0])[0]
+    }
+    p[0] = p[3] + [f"STORE {p[1]}"]
 
 
 def p_other_statement(p):
@@ -200,6 +200,7 @@ def p_bool_expression_identifier(p):
 
 def p_num_expression(p):
     '''num_expression : num_expression PLUS num_expression
+                      | num_expression MINUS num_expression
                       | num_expression TIMES num_expression
                       | num_expression DIVIDE num_expression
     '''
@@ -208,9 +209,11 @@ def p_num_expression(p):
     append_node(node, new_leaf(p.slice[2].type, value=p[2]))
     append_node(node, p[3])
     p[0] = p[1] + p[3] + [{
-            "+": "ADD",
-            "*": "MUL"
-        }[p[2]]]
+        "+": "ADD",
+        "*": "MUL",
+        "-": "SUB",
+        "/": "DIV"
+    }[p[2]]]
 
 
 def p_num_expression_parenthesis(p):
@@ -227,7 +230,7 @@ def p_num_expression_minus(p):
     node = new_node("num_expression")
     append_node(node, new_leaf(p.slice[1].type, value=p[1]))
     append_node(node, p[2])
-    p[0] = node
+    p[0] = [f"push -{p[1]}"]
 
 
 def p_num_expression_num(p):
@@ -254,7 +257,7 @@ def p_func(p):
     append_node(node, p[3])
     append_node(node, p[4])
     append_node(node, new_leaf(p.slice[5].type, value=p[5]))
-    p[0] = node
+    p[0] = [f"DEF {p[2]}:"]
 
 
 def p_opt_args(p):
@@ -324,16 +327,18 @@ lexer = lex()
 parser = yacc()
 
 ast = parser.parse('''
-                    2 + 3 * 4
+                    a = 2 + 2
                    ''',
                    lexer=lexer, tracking=False)
 
 start = [':START __main__']
 data = ['.DATA']
-# for each symbol in symbol_table
-# if (symbol.type == var) {
-#     data.append(symbol.name)
-# }
+for symbol in symbol_table:
+    value = symbol_table.get(symbol).get("value")
+    data.append(f"{symbol} {value}")
+
 code = ['.CODE', 'def __main__:']
-tudo = start + data + code + ast
+halt = ["HALT"]
+
+tudo = start + data + code + ast + halt
 print(yaml.dump(tudo, sort_keys=False, indent=2))
