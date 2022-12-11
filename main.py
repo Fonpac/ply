@@ -1,11 +1,10 @@
 from ply.lex import lex
 from ply.yacc import yacc
 import yaml
+from datetime import datetime
 import re
 
 from node import new_leaf, new_node, append_node
-
-counter_if_name = 1
 
 reserved_words = {
     'TRUE': 'BOOL',
@@ -167,7 +166,17 @@ def p_bool_expression_rel_op(p):
     append_node(node, p[1])
     append_node(node, new_leaf(p.slice[2].type, value=p[2]))
     append_node(node, p[3])
-    p[0] = p[1] + p[3] + ["cmp"]
+    jump_value = ""
+    if p[2] == ">":
+        jump_value = "JMORE"
+    elif p[2] == "<":
+        jump_value = "JLESS"
+    elif p[2] == "==":
+        jump_value = "JZ"
+    elif p[2] == "!=":
+        jump_value = "JNZ"
+    num_value = p[3][0].split()[1]
+    p[0] = p[1] + [f"CMP {num_value}"] + [jump_value]
 
 
 def p_bool_expression_and_or(p):
@@ -310,7 +319,15 @@ def p_if(p):
     append_node(node, p[6])
     append_node(node, p[7])
     append_node(node, new_leaf(p.slice[8].type, value=p[8]))
-    p[0] = p[3] + [":ifjump"] + p[6]
+    now = datetime.now().strftime("%d/%m/%Y%H:%M:%S")
+    if_name = f":ifjump_{now}"
+    symbol_table[p[2]] = {
+        "id_type": "if_statement",
+        "if_name": if_name,
+        'statement': p[6]
+    }
+    p[3][2] = p[3][2] + " " + if_name
+    p[0] = p[3]
 
 
 def p_possible_else(p):
@@ -336,17 +353,15 @@ lexer = lex()
 parser = yacc()
 
 ast = parser.parse('''
-                    TO SUM (a b) 
-                        c = :a + :b
-                        WRITE :c
+                    IF (2 > 1) THEN
+                        3 + 3
                     END
-
-                    SUM 5 6
                    ''',
                    lexer=lexer, tracking=False)
 
 start = ['.START __main__']
 funcs = ["", "", ]
+ifs = []
 data = ["", '.DATA']
 for symbol in symbol_table:
     type_id = symbol_table.get(symbol).get('id_type')
@@ -356,14 +371,17 @@ for symbol in symbol_table:
     elif type_id == 'custom_func':
         value = symbol_table.get(symbol).get("value")
         funcs += value
-
+    elif type_id == 'if_statement':
+        statement = symbol_table.get(symbol).get("statement")
+        if_name = symbol_table.get(symbol).get("if_name")
+        funcs += [if_name] + statement
 
 code = ["", '.CODE', 'def __main__:']
 halt = ["\tHALT"]
 
 logo_code = start + data + code + ast + halt + funcs
 print(yaml.dump(logo_code, sort_keys=False, indent=2))
-file = open("../logovm/examples/teste.lasm", 'w')
+file = open("./teste.lasm", 'w')
 
 for x in logo_code:
     file.write(x + '\n')
