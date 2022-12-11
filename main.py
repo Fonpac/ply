@@ -209,11 +209,7 @@ def p_num_expression(p):
 
 def p_num_expression_parenthesis(p):
     '''num_expression : OPEN_PAR num_expression CLOSE_PAR'''
-    node = new_node("num_expression")
-    append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    append_node(node, p[2])
-    append_node(node, new_leaf(p.slice[3].type, value=p[3]))
-    p[0] = node
+    p[0] = p[2]
 
 
 def p_num_expression_minus(p):
@@ -262,7 +258,6 @@ def p_opt_args(p):
 def p_opt_params(p):
     '''opt_params : expression opt_params
                   | empty'''
-    print(p[1])
     if p[1]:
         p[0] = p[1] + p[2]
     else:
@@ -313,7 +308,8 @@ parser = yacc()
 ast = parser.parse('''
                     b = 3
                     a = :b ^ 2
-                    WRITE :a
+                    c = 4 * (:a + :b)
+                    WRITE :c 
                    ''',
                    lexer=lexer, tracking=False)
 
