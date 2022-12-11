@@ -6,73 +6,78 @@ Rule 0     S' -> program
 Rule 1     program -> statement other_statement
 Rule 2     statement -> assign
 Rule 3     statement -> expression
-Rule 4     assign -> IDENTIFIER EQUALS expression
-Rule 5     other_statement -> statement other_statement
-Rule 6     other_statement -> empty
-Rule 7     expression -> num_expression
-Rule 8     expression -> bool_expression
-Rule 9     expression -> func
-Rule 10    expression -> call_func
-Rule 11    expression -> if
+Rule 4     statement -> if
+Rule 5     assign -> IDENTIFIER EQUALS expression
+Rule 6     other_statement -> statement other_statement
+Rule 7     other_statement -> empty
+Rule 8     expression -> num_expression
+Rule 9     expression -> bool_expression
+Rule 10    expression -> func
+Rule 11    expression -> call_func
 Rule 12    bool_expression -> BOOL
 Rule 13    bool_expression -> NOT bool_expression
 Rule 14    bool_expression -> num_expression REL_OP num_expression
 Rule 15    bool_expression -> bool_expression AND_OR bool_expression
 Rule 16    bool_expression -> OPEN_PAR bool_expression CLOSE_PAR
 Rule 17    bool_expression -> COLON IDENTIFIER
-Rule 18    num_expression -> num_expression NUMBER_OP num_expression
-Rule 19    num_expression -> OPEN_PAR num_expression CLOSE_PAR
-Rule 20    num_expression -> MINUS num_expression
-Rule 21    num_expression -> NUM
-Rule 22    num_expression -> COLON IDENTIFIER
-Rule 23    func -> TO IDENTIFIER opt_args statement END
-Rule 24    opt_args -> IDENTIFIER opt_args
-Rule 25    opt_args -> empty
-Rule 26    opt_params -> expression opt_params
-Rule 27    opt_params -> empty
-Rule 28    call_func -> IDENTIFIER opt_params
-Rule 29    if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
-Rule 30    possible_else -> ELSE statement END
-Rule 31    possible_else -> empty
-Rule 32    empty -> <empty>
+Rule 18    num_expression -> num_expression PLUS num_expression
+Rule 19    num_expression -> num_expression MINUS num_expression
+Rule 20    num_expression -> num_expression TIMES num_expression
+Rule 21    num_expression -> num_expression DIVIDE num_expression
+Rule 22    num_expression -> OPEN_PAR num_expression CLOSE_PAR
+Rule 23    num_expression -> MINUS num_expression
+Rule 24    num_expression -> NUM
+Rule 25    num_expression -> COLON IDENTIFIER
+Rule 26    func -> TO IDENTIFIER opt_args statement END
+Rule 27    opt_args -> IDENTIFIER opt_args
+Rule 28    opt_args -> empty
+Rule 29    opt_params -> expression opt_params
+Rule 30    opt_params -> empty
+Rule 31    call_func -> IDENTIFIER opt_params
+Rule 32    if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+Rule 33    possible_else -> ELSE statement END
+Rule 34    possible_else -> empty
+Rule 35    empty -> <empty>
 
 Terminals, with rules where they appear
 
 AND_OR               : 15
 BOOL                 : 12
-CLOSE_PAR            : 16 19 29
-COLON                : 17 22
-ELSE                 : 30
-END                  : 23 29 30
-EQUALS               : 4
-IDENTIFIER           : 4 17 22 23 24 28
-IF                   : 29
-MINUS                : 20
+CLOSE_PAR            : 16 22 32
+COLON                : 17 25
+DIVIDE               : 21
+ELSE                 : 33
+END                  : 26 32 33
+EQUALS               : 5
+IDENTIFIER           : 5 17 25 26 27 31
+IF                   : 32
+MINUS                : 19 23
 NOT                  : 13
-NUM                  : 21
-NUMBER_OP            : 18
-OPEN_PAR             : 16 19 29
+NUM                  : 24
+OPEN_PAR             : 16 22 32
+PLUS                 : 18
 REL_OP               : 14
-THEN                 : 29
-TO                   : 23
+THEN                 : 32
+TIMES                : 20
+TO                   : 26
 error                : 
 
 Nonterminals, with rules where they appear
 
 assign               : 2
-bool_expression      : 8 13 15 15 16 29
-call_func            : 10
-empty                : 6 25 27 31
-expression           : 3 4 26
-func                 : 9
-if                   : 11
-num_expression       : 7 14 14 18 18 19 20
-opt_args             : 23 24
-opt_params           : 26 28
-other_statement      : 1 5
-possible_else        : 29
+bool_expression      : 9 13 15 15 16 32
+call_func            : 11
+empty                : 7 28 30 34
+expression           : 3 5 29
+func                 : 10
+if                   : 4
+num_expression       : 8 14 14 18 18 19 19 20 20 21 21 22 23
+opt_args             : 26 27
+opt_params           : 29 31
+other_statement      : 1 6
+possible_else        : 32
 program              : 0
-statement            : 1 5 23 29 30
+statement            : 1 6 26 32 33
 
 Parsing method: LALR
 
@@ -82,46 +87,49 @@ state 0
     (1) program -> . statement other_statement
     (2) statement -> . assign
     (3) statement -> . expression
-    (4) assign -> . IDENTIFIER EQUALS expression
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (4) statement -> . if
+    (5) assign -> . IDENTIFIER EQUALS expression
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (32) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
 
-    IDENTIFIER      shift and go to state 5
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
-    IF              shift and go to state 18
+    IDENTIFIER      shift and go to state 6
+    IF              shift and go to state 11
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
 
     program                        shift and go to state 1
     statement                      shift and go to state 2
     assign                         shift and go to state 3
     expression                     shift and go to state 4
-    num_expression                 shift and go to state 6
-    bool_expression                shift and go to state 7
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
+    if                             shift and go to state 5
+    num_expression                 shift and go to state 7
+    bool_expression                shift and go to state 8
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
 
 state 1
 
@@ -132,59 +140,63 @@ state 1
 state 2
 
     (1) program -> statement . other_statement
-    (5) other_statement -> . statement other_statement
-    (6) other_statement -> . empty
+    (6) other_statement -> . statement other_statement
+    (7) other_statement -> . empty
     (2) statement -> . assign
     (3) statement -> . expression
-    (32) empty -> .
-    (4) assign -> . IDENTIFIER EQUALS expression
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (4) statement -> . if
+    (35) empty -> .
+    (5) assign -> . IDENTIFIER EQUALS expression
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (32) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
 
-    $end            reduce using rule 32 (empty -> .)
-    IDENTIFIER      shift and go to state 5
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
-    IF              shift and go to state 18
+    $end            reduce using rule 35 (empty -> .)
+    IDENTIFIER      shift and go to state 6
+    IF              shift and go to state 11
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
 
     statement                      shift and go to state 19
     other_statement                shift and go to state 20
     empty                          shift and go to state 21
     assign                         shift and go to state 3
     expression                     shift and go to state 4
-    num_expression                 shift and go to state 6
-    bool_expression                shift and go to state 7
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
+    if                             shift and go to state 5
+    num_expression                 shift and go to state 7
+    bool_expression                shift and go to state 8
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
 
 state 3
 
     (2) statement -> assign .
 
     IDENTIFIER      reduce using rule 2 (statement -> assign .)
+    IF              reduce using rule 2 (statement -> assign .)
     OPEN_PAR        reduce using rule 2 (statement -> assign .)
     MINUS           reduce using rule 2 (statement -> assign .)
     NUM             reduce using rule 2 (statement -> assign .)
@@ -192,7 +204,6 @@ state 3
     BOOL            reduce using rule 2 (statement -> assign .)
     NOT             reduce using rule 2 (statement -> assign .)
     TO              reduce using rule 2 (statement -> assign .)
-    IF              reduce using rule 2 (statement -> assign .)
     $end            reduce using rule 2 (statement -> assign .)
     END             reduce using rule 2 (statement -> assign .)
     ELSE            reduce using rule 2 (statement -> assign .)
@@ -203,6 +214,7 @@ state 4
     (3) statement -> expression .
 
     IDENTIFIER      reduce using rule 3 (statement -> expression .)
+    IF              reduce using rule 3 (statement -> expression .)
     OPEN_PAR        reduce using rule 3 (statement -> expression .)
     MINUS           reduce using rule 3 (statement -> expression .)
     NUM             reduce using rule 3 (statement -> expression .)
@@ -210,7 +222,6 @@ state 4
     BOOL            reduce using rule 3 (statement -> expression .)
     NOT             reduce using rule 3 (statement -> expression .)
     TO              reduce using rule 3 (statement -> expression .)
-    IF              reduce using rule 3 (statement -> expression .)
     $end            reduce using rule 3 (statement -> expression .)
     END             reduce using rule 3 (statement -> expression .)
     ELSE            reduce using rule 3 (statement -> expression .)
@@ -218,30 +229,49 @@ state 4
 
 state 5
 
-    (4) assign -> IDENTIFIER . EQUALS expression
-    (28) call_func -> IDENTIFIER . opt_params
-    (26) opt_params -> . expression opt_params
-    (27) opt_params -> . empty
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (32) empty -> .
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (4) statement -> if .
+
+    IDENTIFIER      reduce using rule 4 (statement -> if .)
+    IF              reduce using rule 4 (statement -> if .)
+    OPEN_PAR        reduce using rule 4 (statement -> if .)
+    MINUS           reduce using rule 4 (statement -> if .)
+    NUM             reduce using rule 4 (statement -> if .)
+    COLON           reduce using rule 4 (statement -> if .)
+    BOOL            reduce using rule 4 (statement -> if .)
+    NOT             reduce using rule 4 (statement -> if .)
+    TO              reduce using rule 4 (statement -> if .)
+    $end            reduce using rule 4 (statement -> if .)
+    END             reduce using rule 4 (statement -> if .)
+    ELSE            reduce using rule 4 (statement -> if .)
+
+
+state 6
+
+    (5) assign -> IDENTIFIER . EQUALS expression
+    (31) call_func -> IDENTIFIER . opt_params
+    (29) opt_params -> . expression opt_params
+    (30) opt_params -> . empty
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (35) empty -> .
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
 
   ! shift/reduce conflict for OPEN_PAR resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
@@ -251,145 +281,142 @@ state 5
   ! shift/reduce conflict for NOT resolved as shift
   ! shift/reduce conflict for TO resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
     EQUALS          shift and go to state 23
-    $end            reduce using rule 32 (empty -> .)
-    END             reduce using rule 32 (empty -> .)
-    ELSE            reduce using rule 32 (empty -> .)
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
+    IF              reduce using rule 35 (empty -> .)
+    $end            reduce using rule 35 (empty -> .)
+    END             reduce using rule 35 (empty -> .)
+    ELSE            reduce using rule 35 (empty -> .)
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
     IDENTIFIER      shift and go to state 22
-    IF              shift and go to state 18
 
-  ! IDENTIFIER      [ reduce using rule 32 (empty -> .) ]
-  ! OPEN_PAR        [ reduce using rule 32 (empty -> .) ]
-  ! MINUS           [ reduce using rule 32 (empty -> .) ]
-  ! NUM             [ reduce using rule 32 (empty -> .) ]
-  ! COLON           [ reduce using rule 32 (empty -> .) ]
-  ! BOOL            [ reduce using rule 32 (empty -> .) ]
-  ! NOT             [ reduce using rule 32 (empty -> .) ]
-  ! TO              [ reduce using rule 32 (empty -> .) ]
-  ! IF              [ reduce using rule 32 (empty -> .) ]
+  ! IDENTIFIER      [ reduce using rule 35 (empty -> .) ]
+  ! OPEN_PAR        [ reduce using rule 35 (empty -> .) ]
+  ! MINUS           [ reduce using rule 35 (empty -> .) ]
+  ! NUM             [ reduce using rule 35 (empty -> .) ]
+  ! COLON           [ reduce using rule 35 (empty -> .) ]
+  ! BOOL            [ reduce using rule 35 (empty -> .) ]
+  ! NOT             [ reduce using rule 35 (empty -> .) ]
+  ! TO              [ reduce using rule 35 (empty -> .) ]
 
     expression                     shift and go to state 24
     opt_params                     shift and go to state 25
     empty                          shift and go to state 26
-    num_expression                 shift and go to state 6
-    bool_expression                shift and go to state 7
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
-
-state 6
-
-    (7) expression -> num_expression .
-    (18) num_expression -> num_expression . NUMBER_OP num_expression
-    (14) bool_expression -> num_expression . REL_OP num_expression
-
-    IDENTIFIER      reduce using rule 7 (expression -> num_expression .)
-    OPEN_PAR        reduce using rule 7 (expression -> num_expression .)
-    MINUS           reduce using rule 7 (expression -> num_expression .)
-    NUM             reduce using rule 7 (expression -> num_expression .)
-    COLON           reduce using rule 7 (expression -> num_expression .)
-    BOOL            reduce using rule 7 (expression -> num_expression .)
-    NOT             reduce using rule 7 (expression -> num_expression .)
-    TO              reduce using rule 7 (expression -> num_expression .)
-    IF              reduce using rule 7 (expression -> num_expression .)
-    $end            reduce using rule 7 (expression -> num_expression .)
-    END             reduce using rule 7 (expression -> num_expression .)
-    ELSE            reduce using rule 7 (expression -> num_expression .)
-    NUMBER_OP       shift and go to state 27
-    REL_OP          shift and go to state 28
-
+    num_expression                 shift and go to state 7
+    bool_expression                shift and go to state 8
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
 
 state 7
 
-    (8) expression -> bool_expression .
-    (15) bool_expression -> bool_expression . AND_OR bool_expression
+    (8) expression -> num_expression .
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
+    (14) bool_expression -> num_expression . REL_OP num_expression
 
-    IDENTIFIER      reduce using rule 8 (expression -> bool_expression .)
-    OPEN_PAR        reduce using rule 8 (expression -> bool_expression .)
-    MINUS           reduce using rule 8 (expression -> bool_expression .)
-    NUM             reduce using rule 8 (expression -> bool_expression .)
-    COLON           reduce using rule 8 (expression -> bool_expression .)
-    BOOL            reduce using rule 8 (expression -> bool_expression .)
-    NOT             reduce using rule 8 (expression -> bool_expression .)
-    TO              reduce using rule 8 (expression -> bool_expression .)
-    IF              reduce using rule 8 (expression -> bool_expression .)
-    $end            reduce using rule 8 (expression -> bool_expression .)
-    END             reduce using rule 8 (expression -> bool_expression .)
-    ELSE            reduce using rule 8 (expression -> bool_expression .)
-    AND_OR          shift and go to state 29
+  ! shift/reduce conflict for MINUS resolved as shift
+    IDENTIFIER      reduce using rule 8 (expression -> num_expression .)
+    IF              reduce using rule 8 (expression -> num_expression .)
+    OPEN_PAR        reduce using rule 8 (expression -> num_expression .)
+    NUM             reduce using rule 8 (expression -> num_expression .)
+    COLON           reduce using rule 8 (expression -> num_expression .)
+    BOOL            reduce using rule 8 (expression -> num_expression .)
+    NOT             reduce using rule 8 (expression -> num_expression .)
+    TO              reduce using rule 8 (expression -> num_expression .)
+    $end            reduce using rule 8 (expression -> num_expression .)
+    END             reduce using rule 8 (expression -> num_expression .)
+    ELSE            reduce using rule 8 (expression -> num_expression .)
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 29
+    DIVIDE          shift and go to state 30
+    REL_OP          shift and go to state 31
+
+  ! MINUS           [ reduce using rule 8 (expression -> num_expression .) ]
 
 
 state 8
 
-    (9) expression -> func .
+    (9) expression -> bool_expression .
+    (15) bool_expression -> bool_expression . AND_OR bool_expression
 
-    IDENTIFIER      reduce using rule 9 (expression -> func .)
-    OPEN_PAR        reduce using rule 9 (expression -> func .)
-    MINUS           reduce using rule 9 (expression -> func .)
-    NUM             reduce using rule 9 (expression -> func .)
-    COLON           reduce using rule 9 (expression -> func .)
-    BOOL            reduce using rule 9 (expression -> func .)
-    NOT             reduce using rule 9 (expression -> func .)
-    TO              reduce using rule 9 (expression -> func .)
-    IF              reduce using rule 9 (expression -> func .)
-    $end            reduce using rule 9 (expression -> func .)
-    END             reduce using rule 9 (expression -> func .)
-    ELSE            reduce using rule 9 (expression -> func .)
+    IDENTIFIER      reduce using rule 9 (expression -> bool_expression .)
+    IF              reduce using rule 9 (expression -> bool_expression .)
+    OPEN_PAR        reduce using rule 9 (expression -> bool_expression .)
+    MINUS           reduce using rule 9 (expression -> bool_expression .)
+    NUM             reduce using rule 9 (expression -> bool_expression .)
+    COLON           reduce using rule 9 (expression -> bool_expression .)
+    BOOL            reduce using rule 9 (expression -> bool_expression .)
+    NOT             reduce using rule 9 (expression -> bool_expression .)
+    TO              reduce using rule 9 (expression -> bool_expression .)
+    $end            reduce using rule 9 (expression -> bool_expression .)
+    END             reduce using rule 9 (expression -> bool_expression .)
+    ELSE            reduce using rule 9 (expression -> bool_expression .)
+    AND_OR          shift and go to state 32
 
 
 state 9
 
-    (10) expression -> call_func .
+    (10) expression -> func .
 
-    IDENTIFIER      reduce using rule 10 (expression -> call_func .)
-    OPEN_PAR        reduce using rule 10 (expression -> call_func .)
-    MINUS           reduce using rule 10 (expression -> call_func .)
-    NUM             reduce using rule 10 (expression -> call_func .)
-    COLON           reduce using rule 10 (expression -> call_func .)
-    BOOL            reduce using rule 10 (expression -> call_func .)
-    NOT             reduce using rule 10 (expression -> call_func .)
-    TO              reduce using rule 10 (expression -> call_func .)
-    IF              reduce using rule 10 (expression -> call_func .)
-    $end            reduce using rule 10 (expression -> call_func .)
-    END             reduce using rule 10 (expression -> call_func .)
-    ELSE            reduce using rule 10 (expression -> call_func .)
+    IDENTIFIER      reduce using rule 10 (expression -> func .)
+    IF              reduce using rule 10 (expression -> func .)
+    OPEN_PAR        reduce using rule 10 (expression -> func .)
+    MINUS           reduce using rule 10 (expression -> func .)
+    NUM             reduce using rule 10 (expression -> func .)
+    COLON           reduce using rule 10 (expression -> func .)
+    BOOL            reduce using rule 10 (expression -> func .)
+    NOT             reduce using rule 10 (expression -> func .)
+    TO              reduce using rule 10 (expression -> func .)
+    $end            reduce using rule 10 (expression -> func .)
+    END             reduce using rule 10 (expression -> func .)
+    ELSE            reduce using rule 10 (expression -> func .)
 
 
 state 10
 
-    (11) expression -> if .
+    (11) expression -> call_func .
 
-    IDENTIFIER      reduce using rule 11 (expression -> if .)
-    OPEN_PAR        reduce using rule 11 (expression -> if .)
-    MINUS           reduce using rule 11 (expression -> if .)
-    NUM             reduce using rule 11 (expression -> if .)
-    COLON           reduce using rule 11 (expression -> if .)
-    BOOL            reduce using rule 11 (expression -> if .)
-    NOT             reduce using rule 11 (expression -> if .)
-    TO              reduce using rule 11 (expression -> if .)
-    IF              reduce using rule 11 (expression -> if .)
-    $end            reduce using rule 11 (expression -> if .)
-    END             reduce using rule 11 (expression -> if .)
-    ELSE            reduce using rule 11 (expression -> if .)
+    IDENTIFIER      reduce using rule 11 (expression -> call_func .)
+    IF              reduce using rule 11 (expression -> call_func .)
+    OPEN_PAR        reduce using rule 11 (expression -> call_func .)
+    MINUS           reduce using rule 11 (expression -> call_func .)
+    NUM             reduce using rule 11 (expression -> call_func .)
+    COLON           reduce using rule 11 (expression -> call_func .)
+    BOOL            reduce using rule 11 (expression -> call_func .)
+    NOT             reduce using rule 11 (expression -> call_func .)
+    TO              reduce using rule 11 (expression -> call_func .)
+    $end            reduce using rule 11 (expression -> call_func .)
+    END             reduce using rule 11 (expression -> call_func .)
+    ELSE            reduce using rule 11 (expression -> call_func .)
 
 
 state 11
 
-    (19) num_expression -> OPEN_PAR . num_expression CLOSE_PAR
+    (32) if -> IF . OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+
+    OPEN_PAR        shift and go to state 33
+
+
+state 12
+
+    (22) num_expression -> OPEN_PAR . num_expression CLOSE_PAR
     (16) bool_expression -> OPEN_PAR . bool_expression CLOSE_PAR
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
@@ -397,68 +424,74 @@ state 11
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
 
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
 
-    num_expression                 shift and go to state 30
-    bool_expression                shift and go to state 31
-
-state 12
-
-    (20) num_expression -> MINUS . num_expression
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
-
-    OPEN_PAR        shift and go to state 33
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 34
-
-    num_expression                 shift and go to state 32
+    num_expression                 shift and go to state 34
+    bool_expression                shift and go to state 35
 
 state 13
 
-    (21) num_expression -> NUM .
+    (23) num_expression -> MINUS . num_expression
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
 
-    NUMBER_OP       reduce using rule 21 (num_expression -> NUM .)
-    REL_OP          reduce using rule 21 (num_expression -> NUM .)
-    IDENTIFIER      reduce using rule 21 (num_expression -> NUM .)
-    OPEN_PAR        reduce using rule 21 (num_expression -> NUM .)
-    MINUS           reduce using rule 21 (num_expression -> NUM .)
-    NUM             reduce using rule 21 (num_expression -> NUM .)
-    COLON           reduce using rule 21 (num_expression -> NUM .)
-    BOOL            reduce using rule 21 (num_expression -> NUM .)
-    NOT             reduce using rule 21 (num_expression -> NUM .)
-    TO              reduce using rule 21 (num_expression -> NUM .)
-    IF              reduce using rule 21 (num_expression -> NUM .)
-    $end            reduce using rule 21 (num_expression -> NUM .)
-    END             reduce using rule 21 (num_expression -> NUM .)
-    ELSE            reduce using rule 21 (num_expression -> NUM .)
-    CLOSE_PAR       reduce using rule 21 (num_expression -> NUM .)
-    AND_OR          reduce using rule 21 (num_expression -> NUM .)
+    OPEN_PAR        shift and go to state 37
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 38
 
+    num_expression                 shift and go to state 36
 
 state 14
 
-    (22) num_expression -> COLON . IDENTIFIER
-    (17) bool_expression -> COLON . IDENTIFIER
+    (24) num_expression -> NUM .
 
-    IDENTIFIER      shift and go to state 35
+    PLUS            reduce using rule 24 (num_expression -> NUM .)
+    MINUS           reduce using rule 24 (num_expression -> NUM .)
+    TIMES           reduce using rule 24 (num_expression -> NUM .)
+    DIVIDE          reduce using rule 24 (num_expression -> NUM .)
+    REL_OP          reduce using rule 24 (num_expression -> NUM .)
+    IDENTIFIER      reduce using rule 24 (num_expression -> NUM .)
+    IF              reduce using rule 24 (num_expression -> NUM .)
+    OPEN_PAR        reduce using rule 24 (num_expression -> NUM .)
+    NUM             reduce using rule 24 (num_expression -> NUM .)
+    COLON           reduce using rule 24 (num_expression -> NUM .)
+    BOOL            reduce using rule 24 (num_expression -> NUM .)
+    NOT             reduce using rule 24 (num_expression -> NUM .)
+    TO              reduce using rule 24 (num_expression -> NUM .)
+    $end            reduce using rule 24 (num_expression -> NUM .)
+    END             reduce using rule 24 (num_expression -> NUM .)
+    ELSE            reduce using rule 24 (num_expression -> NUM .)
+    CLOSE_PAR       reduce using rule 24 (num_expression -> NUM .)
+    AND_OR          reduce using rule 24 (num_expression -> NUM .)
 
 
 state 15
+
+    (25) num_expression -> COLON . IDENTIFIER
+    (17) bool_expression -> COLON . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 39
+
+
+state 16
 
     (12) bool_expression -> BOOL .
 
     AND_OR          reduce using rule 12 (bool_expression -> BOOL .)
     IDENTIFIER      reduce using rule 12 (bool_expression -> BOOL .)
+    IF              reduce using rule 12 (bool_expression -> BOOL .)
     OPEN_PAR        reduce using rule 12 (bool_expression -> BOOL .)
     MINUS           reduce using rule 12 (bool_expression -> BOOL .)
     NUM             reduce using rule 12 (bool_expression -> BOOL .)
@@ -466,14 +499,13 @@ state 15
     BOOL            reduce using rule 12 (bool_expression -> BOOL .)
     NOT             reduce using rule 12 (bool_expression -> BOOL .)
     TO              reduce using rule 12 (bool_expression -> BOOL .)
-    IF              reduce using rule 12 (bool_expression -> BOOL .)
     $end            reduce using rule 12 (bool_expression -> BOOL .)
     END             reduce using rule 12 (bool_expression -> BOOL .)
     ELSE            reduce using rule 12 (bool_expression -> BOOL .)
     CLOSE_PAR       reduce using rule 12 (bool_expression -> BOOL .)
 
 
-state 16
+state 17
 
     (13) bool_expression -> NOT . bool_expression
     (12) bool_expression -> . BOOL
@@ -482,86 +514,85 @@ state 16
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
 
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    OPEN_PAR        shift and go to state 38
-    COLON           shift and go to state 39
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    OPEN_PAR        shift and go to state 42
+    COLON           shift and go to state 43
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
 
-    bool_expression                shift and go to state 36
-    num_expression                 shift and go to state 37
-
-state 17
-
-    (23) func -> TO . IDENTIFIER opt_args statement END
-
-    IDENTIFIER      shift and go to state 40
-
+    bool_expression                shift and go to state 40
+    num_expression                 shift and go to state 41
 
 state 18
 
-    (29) if -> IF . OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> TO . IDENTIFIER opt_args statement END
 
-    OPEN_PAR        shift and go to state 41
+    IDENTIFIER      shift and go to state 44
 
 
 state 19
 
-    (5) other_statement -> statement . other_statement
-    (5) other_statement -> . statement other_statement
-    (6) other_statement -> . empty
+    (6) other_statement -> statement . other_statement
+    (6) other_statement -> . statement other_statement
+    (7) other_statement -> . empty
     (2) statement -> . assign
     (3) statement -> . expression
-    (32) empty -> .
-    (4) assign -> . IDENTIFIER EQUALS expression
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (4) statement -> . if
+    (35) empty -> .
+    (5) assign -> . IDENTIFIER EQUALS expression
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (32) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
 
-    $end            reduce using rule 32 (empty -> .)
-    IDENTIFIER      shift and go to state 5
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
-    IF              shift and go to state 18
+    $end            reduce using rule 35 (empty -> .)
+    IDENTIFIER      shift and go to state 6
+    IF              shift and go to state 11
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
 
     statement                      shift and go to state 19
-    other_statement                shift and go to state 42
+    other_statement                shift and go to state 45
     empty                          shift and go to state 21
     assign                         shift and go to state 3
     expression                     shift and go to state 4
-    num_expression                 shift and go to state 6
-    bool_expression                shift and go to state 7
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
+    if                             shift and go to state 5
+    num_expression                 shift and go to state 7
+    bool_expression                shift and go to state 8
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
 
 state 20
 
@@ -572,36 +603,37 @@ state 20
 
 state 21
 
-    (6) other_statement -> empty .
+    (7) other_statement -> empty .
 
-    $end            reduce using rule 6 (other_statement -> empty .)
+    $end            reduce using rule 7 (other_statement -> empty .)
 
 
 state 22
 
-    (28) call_func -> IDENTIFIER . opt_params
-    (26) opt_params -> . expression opt_params
-    (27) opt_params -> . empty
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (32) empty -> .
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (31) call_func -> IDENTIFIER . opt_params
+    (29) opt_params -> . expression opt_params
+    (30) opt_params -> . empty
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (35) empty -> .
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
 
   ! shift/reduce conflict for OPEN_PAR resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
@@ -611,104 +643,101 @@ state 22
   ! shift/reduce conflict for NOT resolved as shift
   ! shift/reduce conflict for TO resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-    $end            reduce using rule 32 (empty -> .)
-    END             reduce using rule 32 (empty -> .)
-    ELSE            reduce using rule 32 (empty -> .)
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
+    IF              reduce using rule 35 (empty -> .)
+    $end            reduce using rule 35 (empty -> .)
+    END             reduce using rule 35 (empty -> .)
+    ELSE            reduce using rule 35 (empty -> .)
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
     IDENTIFIER      shift and go to state 22
-    IF              shift and go to state 18
 
-  ! OPEN_PAR        [ reduce using rule 32 (empty -> .) ]
-  ! MINUS           [ reduce using rule 32 (empty -> .) ]
-  ! NUM             [ reduce using rule 32 (empty -> .) ]
-  ! COLON           [ reduce using rule 32 (empty -> .) ]
-  ! BOOL            [ reduce using rule 32 (empty -> .) ]
-  ! NOT             [ reduce using rule 32 (empty -> .) ]
-  ! TO              [ reduce using rule 32 (empty -> .) ]
-  ! IDENTIFIER      [ reduce using rule 32 (empty -> .) ]
-  ! IF              [ reduce using rule 32 (empty -> .) ]
+  ! OPEN_PAR        [ reduce using rule 35 (empty -> .) ]
+  ! MINUS           [ reduce using rule 35 (empty -> .) ]
+  ! NUM             [ reduce using rule 35 (empty -> .) ]
+  ! COLON           [ reduce using rule 35 (empty -> .) ]
+  ! BOOL            [ reduce using rule 35 (empty -> .) ]
+  ! NOT             [ reduce using rule 35 (empty -> .) ]
+  ! TO              [ reduce using rule 35 (empty -> .) ]
+  ! IDENTIFIER      [ reduce using rule 35 (empty -> .) ]
 
     opt_params                     shift and go to state 25
     expression                     shift and go to state 24
     empty                          shift and go to state 26
-    num_expression                 shift and go to state 6
-    bool_expression                shift and go to state 7
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
+    num_expression                 shift and go to state 7
+    bool_expression                shift and go to state 8
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
 
 state 23
 
-    (4) assign -> IDENTIFIER EQUALS . expression
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (5) assign -> IDENTIFIER EQUALS . expression
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
 
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
     IDENTIFIER      shift and go to state 22
-    IF              shift and go to state 18
 
-    expression                     shift and go to state 43
-    num_expression                 shift and go to state 6
-    bool_expression                shift and go to state 7
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
+    expression                     shift and go to state 46
+    num_expression                 shift and go to state 7
+    bool_expression                shift and go to state 8
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
 
 state 24
 
-    (26) opt_params -> expression . opt_params
-    (26) opt_params -> . expression opt_params
-    (27) opt_params -> . empty
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (32) empty -> .
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (29) opt_params -> expression . opt_params
+    (29) opt_params -> . expression opt_params
+    (30) opt_params -> . empty
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (35) empty -> .
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
 
   ! shift/reduce conflict for OPEN_PAR resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
@@ -718,108 +747,168 @@ state 24
   ! shift/reduce conflict for NOT resolved as shift
   ! shift/reduce conflict for TO resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-    $end            reduce using rule 32 (empty -> .)
-    END             reduce using rule 32 (empty -> .)
-    ELSE            reduce using rule 32 (empty -> .)
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
+    IF              reduce using rule 35 (empty -> .)
+    $end            reduce using rule 35 (empty -> .)
+    END             reduce using rule 35 (empty -> .)
+    ELSE            reduce using rule 35 (empty -> .)
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
     IDENTIFIER      shift and go to state 22
-    IF              shift and go to state 18
 
-  ! OPEN_PAR        [ reduce using rule 32 (empty -> .) ]
-  ! MINUS           [ reduce using rule 32 (empty -> .) ]
-  ! NUM             [ reduce using rule 32 (empty -> .) ]
-  ! COLON           [ reduce using rule 32 (empty -> .) ]
-  ! BOOL            [ reduce using rule 32 (empty -> .) ]
-  ! NOT             [ reduce using rule 32 (empty -> .) ]
-  ! TO              [ reduce using rule 32 (empty -> .) ]
-  ! IDENTIFIER      [ reduce using rule 32 (empty -> .) ]
-  ! IF              [ reduce using rule 32 (empty -> .) ]
+  ! OPEN_PAR        [ reduce using rule 35 (empty -> .) ]
+  ! MINUS           [ reduce using rule 35 (empty -> .) ]
+  ! NUM             [ reduce using rule 35 (empty -> .) ]
+  ! COLON           [ reduce using rule 35 (empty -> .) ]
+  ! BOOL            [ reduce using rule 35 (empty -> .) ]
+  ! NOT             [ reduce using rule 35 (empty -> .) ]
+  ! TO              [ reduce using rule 35 (empty -> .) ]
+  ! IDENTIFIER      [ reduce using rule 35 (empty -> .) ]
 
     expression                     shift and go to state 24
-    opt_params                     shift and go to state 44
+    opt_params                     shift and go to state 47
     empty                          shift and go to state 26
-    num_expression                 shift and go to state 6
-    bool_expression                shift and go to state 7
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
+    num_expression                 shift and go to state 7
+    bool_expression                shift and go to state 8
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
 
 state 25
 
-    (28) call_func -> IDENTIFIER opt_params .
+    (31) call_func -> IDENTIFIER opt_params .
 
-    IDENTIFIER      reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    OPEN_PAR        reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    MINUS           reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    NUM             reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    COLON           reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    BOOL            reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    NOT             reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    TO              reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    IF              reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    $end            reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    END             reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
-    ELSE            reduce using rule 28 (call_func -> IDENTIFIER opt_params .)
+    IDENTIFIER      reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    IF              reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    OPEN_PAR        reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    MINUS           reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    NUM             reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    COLON           reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    BOOL            reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    NOT             reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    TO              reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    $end            reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    END             reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
+    ELSE            reduce using rule 31 (call_func -> IDENTIFIER opt_params .)
 
 
 state 26
 
-    (27) opt_params -> empty .
+    (30) opt_params -> empty .
 
-    IDENTIFIER      reduce using rule 27 (opt_params -> empty .)
-    OPEN_PAR        reduce using rule 27 (opt_params -> empty .)
-    MINUS           reduce using rule 27 (opt_params -> empty .)
-    NUM             reduce using rule 27 (opt_params -> empty .)
-    COLON           reduce using rule 27 (opt_params -> empty .)
-    BOOL            reduce using rule 27 (opt_params -> empty .)
-    NOT             reduce using rule 27 (opt_params -> empty .)
-    TO              reduce using rule 27 (opt_params -> empty .)
-    IF              reduce using rule 27 (opt_params -> empty .)
-    $end            reduce using rule 27 (opt_params -> empty .)
-    END             reduce using rule 27 (opt_params -> empty .)
-    ELSE            reduce using rule 27 (opt_params -> empty .)
+    IDENTIFIER      reduce using rule 30 (opt_params -> empty .)
+    IF              reduce using rule 30 (opt_params -> empty .)
+    OPEN_PAR        reduce using rule 30 (opt_params -> empty .)
+    MINUS           reduce using rule 30 (opt_params -> empty .)
+    NUM             reduce using rule 30 (opt_params -> empty .)
+    COLON           reduce using rule 30 (opt_params -> empty .)
+    BOOL            reduce using rule 30 (opt_params -> empty .)
+    NOT             reduce using rule 30 (opt_params -> empty .)
+    TO              reduce using rule 30 (opt_params -> empty .)
+    $end            reduce using rule 30 (opt_params -> empty .)
+    END             reduce using rule 30 (opt_params -> empty .)
+    ELSE            reduce using rule 30 (opt_params -> empty .)
 
 
 state 27
 
-    (18) num_expression -> num_expression NUMBER_OP . num_expression
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (18) num_expression -> num_expression PLUS . num_expression
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
 
-    OPEN_PAR        shift and go to state 33
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 34
+    OPEN_PAR        shift and go to state 37
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 38
 
-    num_expression                 shift and go to state 45
+    num_expression                 shift and go to state 48
 
 state 28
 
-    (14) bool_expression -> num_expression REL_OP . num_expression
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (19) num_expression -> num_expression MINUS . num_expression
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
 
-    OPEN_PAR        shift and go to state 33
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 34
+    OPEN_PAR        shift and go to state 37
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 38
 
-    num_expression                 shift and go to state 46
+    num_expression                 shift and go to state 49
 
 state 29
+
+    (20) num_expression -> num_expression TIMES . num_expression
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
+
+    OPEN_PAR        shift and go to state 37
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 38
+
+    num_expression                 shift and go to state 50
+
+state 30
+
+    (21) num_expression -> num_expression DIVIDE . num_expression
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
+
+    OPEN_PAR        shift and go to state 37
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 38
+
+    num_expression                 shift and go to state 51
+
+state 31
+
+    (14) bool_expression -> num_expression REL_OP . num_expression
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
+
+    OPEN_PAR        shift and go to state 37
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 38
+
+    num_expression                 shift and go to state 52
+
+state 32
 
     (15) bool_expression -> bool_expression AND_OR . bool_expression
     (12) bool_expression -> . BOOL
@@ -828,97 +917,145 @@ state 29
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
 
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    OPEN_PAR        shift and go to state 38
-    COLON           shift and go to state 39
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    OPEN_PAR        shift and go to state 42
+    COLON           shift and go to state 43
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
 
-    bool_expression                shift and go to state 47
-    num_expression                 shift and go to state 37
-
-state 30
-
-    (19) num_expression -> OPEN_PAR num_expression . CLOSE_PAR
-    (18) num_expression -> num_expression . NUMBER_OP num_expression
-    (14) bool_expression -> num_expression . REL_OP num_expression
-
-    CLOSE_PAR       shift and go to state 48
-    NUMBER_OP       shift and go to state 27
-    REL_OP          shift and go to state 28
-
-
-state 31
-
-    (16) bool_expression -> OPEN_PAR bool_expression . CLOSE_PAR
-    (15) bool_expression -> bool_expression . AND_OR bool_expression
-
-    CLOSE_PAR       shift and go to state 49
-    AND_OR          shift and go to state 29
-
-
-state 32
-
-    (20) num_expression -> MINUS num_expression .
-    (18) num_expression -> num_expression . NUMBER_OP num_expression
-
-  ! shift/reduce conflict for NUMBER_OP resolved as shift
-    REL_OP          reduce using rule 20 (num_expression -> MINUS num_expression .)
-    IDENTIFIER      reduce using rule 20 (num_expression -> MINUS num_expression .)
-    OPEN_PAR        reduce using rule 20 (num_expression -> MINUS num_expression .)
-    MINUS           reduce using rule 20 (num_expression -> MINUS num_expression .)
-    NUM             reduce using rule 20 (num_expression -> MINUS num_expression .)
-    COLON           reduce using rule 20 (num_expression -> MINUS num_expression .)
-    BOOL            reduce using rule 20 (num_expression -> MINUS num_expression .)
-    NOT             reduce using rule 20 (num_expression -> MINUS num_expression .)
-    TO              reduce using rule 20 (num_expression -> MINUS num_expression .)
-    IF              reduce using rule 20 (num_expression -> MINUS num_expression .)
-    $end            reduce using rule 20 (num_expression -> MINUS num_expression .)
-    END             reduce using rule 20 (num_expression -> MINUS num_expression .)
-    ELSE            reduce using rule 20 (num_expression -> MINUS num_expression .)
-    CLOSE_PAR       reduce using rule 20 (num_expression -> MINUS num_expression .)
-    AND_OR          reduce using rule 20 (num_expression -> MINUS num_expression .)
-    NUMBER_OP       shift and go to state 27
-
-  ! NUMBER_OP       [ reduce using rule 20 (num_expression -> MINUS num_expression .) ]
-
+    bool_expression                shift and go to state 53
+    num_expression                 shift and go to state 41
 
 state 33
 
-    (19) num_expression -> OPEN_PAR . num_expression CLOSE_PAR
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (32) if -> IF OPEN_PAR . bool_expression CLOSE_PAR THEN statement possible_else END
+    (12) bool_expression -> . BOOL
+    (13) bool_expression -> . NOT bool_expression
+    (14) bool_expression -> . num_expression REL_OP num_expression
+    (15) bool_expression -> . bool_expression AND_OR bool_expression
+    (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
+    (17) bool_expression -> . COLON IDENTIFIER
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
 
-    OPEN_PAR        shift and go to state 33
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 34
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    OPEN_PAR        shift and go to state 42
+    COLON           shift and go to state 43
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
 
-    num_expression                 shift and go to state 50
+    bool_expression                shift and go to state 54
+    num_expression                 shift and go to state 41
 
 state 34
 
-    (22) num_expression -> COLON . IDENTIFIER
+    (22) num_expression -> OPEN_PAR num_expression . CLOSE_PAR
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
+    (14) bool_expression -> num_expression . REL_OP num_expression
 
-    IDENTIFIER      shift and go to state 51
+    CLOSE_PAR       shift and go to state 55
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 29
+    DIVIDE          shift and go to state 30
+    REL_OP          shift and go to state 31
 
 
 state 35
 
-    (22) num_expression -> COLON IDENTIFIER .
+    (16) bool_expression -> OPEN_PAR bool_expression . CLOSE_PAR
+    (15) bool_expression -> bool_expression . AND_OR bool_expression
+
+    CLOSE_PAR       shift and go to state 56
+    AND_OR          shift and go to state 32
+
+
+state 36
+
+    (23) num_expression -> MINUS num_expression .
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
+
+    PLUS            reduce using rule 23 (num_expression -> MINUS num_expression .)
+    MINUS           reduce using rule 23 (num_expression -> MINUS num_expression .)
+    REL_OP          reduce using rule 23 (num_expression -> MINUS num_expression .)
+    IDENTIFIER      reduce using rule 23 (num_expression -> MINUS num_expression .)
+    IF              reduce using rule 23 (num_expression -> MINUS num_expression .)
+    OPEN_PAR        reduce using rule 23 (num_expression -> MINUS num_expression .)
+    NUM             reduce using rule 23 (num_expression -> MINUS num_expression .)
+    COLON           reduce using rule 23 (num_expression -> MINUS num_expression .)
+    BOOL            reduce using rule 23 (num_expression -> MINUS num_expression .)
+    NOT             reduce using rule 23 (num_expression -> MINUS num_expression .)
+    TO              reduce using rule 23 (num_expression -> MINUS num_expression .)
+    $end            reduce using rule 23 (num_expression -> MINUS num_expression .)
+    END             reduce using rule 23 (num_expression -> MINUS num_expression .)
+    ELSE            reduce using rule 23 (num_expression -> MINUS num_expression .)
+    CLOSE_PAR       reduce using rule 23 (num_expression -> MINUS num_expression .)
+    AND_OR          reduce using rule 23 (num_expression -> MINUS num_expression .)
+    TIMES           shift and go to state 29
+    DIVIDE          shift and go to state 30
+
+  ! TIMES           [ reduce using rule 23 (num_expression -> MINUS num_expression .) ]
+  ! DIVIDE          [ reduce using rule 23 (num_expression -> MINUS num_expression .) ]
+  ! PLUS            [ shift and go to state 27 ]
+  ! MINUS           [ shift and go to state 28 ]
+
+
+state 37
+
+    (22) num_expression -> OPEN_PAR . num_expression CLOSE_PAR
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
+
+    OPEN_PAR        shift and go to state 37
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 38
+
+    num_expression                 shift and go to state 57
+
+state 38
+
+    (25) num_expression -> COLON . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 58
+
+
+state 39
+
+    (25) num_expression -> COLON IDENTIFIER .
     (17) bool_expression -> COLON IDENTIFIER .
 
   ! reduce/reduce conflict for IDENTIFIER resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
+  ! reduce/reduce conflict for IF resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for OPEN_PAR resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for MINUS resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for NUM resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
@@ -926,15 +1063,17 @@ state 35
   ! reduce/reduce conflict for BOOL resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for NOT resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for TO resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
-  ! reduce/reduce conflict for IF resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for $end resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for END resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for ELSE resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for CLOSE_PAR resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
-    NUMBER_OP       reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    REL_OP          reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
+    PLUS            reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    TIMES           reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    DIVIDE          reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    REL_OP          reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
     AND_OR          reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     IDENTIFIER      reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
+    IF              reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     OPEN_PAR        reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     MINUS           reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     NUM             reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
@@ -942,34 +1081,34 @@ state 35
     BOOL            reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     NOT             reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     TO              reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
-    IF              reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     $end            reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     END             reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     ELSE            reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     CLOSE_PAR       reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
 
-  ! IDENTIFIER      [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! OPEN_PAR        [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! MINUS           [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! NUM             [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! COLON           [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! BOOL            [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! NOT             [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! TO              [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! IF              [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! $end            [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! END             [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! ELSE            [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-  ! CLOSE_PAR       [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
+  ! MINUS           [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! IDENTIFIER      [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! IF              [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! OPEN_PAR        [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! NUM             [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! COLON           [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! BOOL            [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! NOT             [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! TO              [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! $end            [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! END             [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! ELSE            [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! CLOSE_PAR       [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
 
 
-state 36
+state 40
 
     (13) bool_expression -> NOT bool_expression .
     (15) bool_expression -> bool_expression . AND_OR bool_expression
 
   ! shift/reduce conflict for AND_OR resolved as shift
     IDENTIFIER      reduce using rule 13 (bool_expression -> NOT bool_expression .)
+    IF              reduce using rule 13 (bool_expression -> NOT bool_expression .)
     OPEN_PAR        reduce using rule 13 (bool_expression -> NOT bool_expression .)
     MINUS           reduce using rule 13 (bool_expression -> NOT bool_expression .)
     NUM             reduce using rule 13 (bool_expression -> NOT bool_expression .)
@@ -977,205 +1116,303 @@ state 36
     BOOL            reduce using rule 13 (bool_expression -> NOT bool_expression .)
     NOT             reduce using rule 13 (bool_expression -> NOT bool_expression .)
     TO              reduce using rule 13 (bool_expression -> NOT bool_expression .)
-    IF              reduce using rule 13 (bool_expression -> NOT bool_expression .)
     $end            reduce using rule 13 (bool_expression -> NOT bool_expression .)
     END             reduce using rule 13 (bool_expression -> NOT bool_expression .)
     ELSE            reduce using rule 13 (bool_expression -> NOT bool_expression .)
     CLOSE_PAR       reduce using rule 13 (bool_expression -> NOT bool_expression .)
-    AND_OR          shift and go to state 29
+    AND_OR          shift and go to state 32
 
   ! AND_OR          [ reduce using rule 13 (bool_expression -> NOT bool_expression .) ]
 
 
-state 37
-
-    (14) bool_expression -> num_expression . REL_OP num_expression
-    (18) num_expression -> num_expression . NUMBER_OP num_expression
-
-    REL_OP          shift and go to state 28
-    NUMBER_OP       shift and go to state 27
-
-
-state 38
-
-    (16) bool_expression -> OPEN_PAR . bool_expression CLOSE_PAR
-    (19) num_expression -> OPEN_PAR . num_expression CLOSE_PAR
-    (12) bool_expression -> . BOOL
-    (13) bool_expression -> . NOT bool_expression
-    (14) bool_expression -> . num_expression REL_OP num_expression
-    (15) bool_expression -> . bool_expression AND_OR bool_expression
-    (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
-    (17) bool_expression -> . COLON IDENTIFIER
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
-
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    OPEN_PAR        shift and go to state 38
-    COLON           shift and go to state 39
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-
-    bool_expression                shift and go to state 31
-    num_expression                 shift and go to state 52
-
-state 39
-
-    (17) bool_expression -> COLON . IDENTIFIER
-    (22) num_expression -> COLON . IDENTIFIER
-
-    IDENTIFIER      shift and go to state 53
-
-
-state 40
-
-    (23) func -> TO IDENTIFIER . opt_args statement END
-    (24) opt_args -> . IDENTIFIER opt_args
-    (25) opt_args -> . empty
-    (32) empty -> .
-
-  ! shift/reduce conflict for IDENTIFIER resolved as shift
-    IDENTIFIER      shift and go to state 54
-    OPEN_PAR        reduce using rule 32 (empty -> .)
-    MINUS           reduce using rule 32 (empty -> .)
-    NUM             reduce using rule 32 (empty -> .)
-    COLON           reduce using rule 32 (empty -> .)
-    BOOL            reduce using rule 32 (empty -> .)
-    NOT             reduce using rule 32 (empty -> .)
-    TO              reduce using rule 32 (empty -> .)
-    IF              reduce using rule 32 (empty -> .)
-
-  ! IDENTIFIER      [ reduce using rule 32 (empty -> .) ]
-
-    opt_args                       shift and go to state 55
-    empty                          shift and go to state 56
-
 state 41
 
-    (29) if -> IF OPEN_PAR . bool_expression CLOSE_PAR THEN statement possible_else END
-    (12) bool_expression -> . BOOL
-    (13) bool_expression -> . NOT bool_expression
-    (14) bool_expression -> . num_expression REL_OP num_expression
-    (15) bool_expression -> . bool_expression AND_OR bool_expression
-    (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
-    (17) bool_expression -> . COLON IDENTIFIER
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (14) bool_expression -> num_expression . REL_OP num_expression
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
 
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    OPEN_PAR        shift and go to state 38
-    COLON           shift and go to state 39
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
+    REL_OP          shift and go to state 31
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 29
+    DIVIDE          shift and go to state 30
 
-    bool_expression                shift and go to state 57
-    num_expression                 shift and go to state 37
 
 state 42
 
-    (5) other_statement -> statement other_statement .
+    (16) bool_expression -> OPEN_PAR . bool_expression CLOSE_PAR
+    (22) num_expression -> OPEN_PAR . num_expression CLOSE_PAR
+    (12) bool_expression -> . BOOL
+    (13) bool_expression -> . NOT bool_expression
+    (14) bool_expression -> . num_expression REL_OP num_expression
+    (15) bool_expression -> . bool_expression AND_OR bool_expression
+    (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
+    (17) bool_expression -> . COLON IDENTIFIER
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
 
-    $end            reduce using rule 5 (other_statement -> statement other_statement .)
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    OPEN_PAR        shift and go to state 42
+    COLON           shift and go to state 43
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
 
+    bool_expression                shift and go to state 35
+    num_expression                 shift and go to state 59
 
 state 43
 
-    (4) assign -> IDENTIFIER EQUALS expression .
+    (17) bool_expression -> COLON . IDENTIFIER
+    (25) num_expression -> COLON . IDENTIFIER
 
-    IDENTIFIER      reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    OPEN_PAR        reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    MINUS           reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    NUM             reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    COLON           reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    BOOL            reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    NOT             reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    TO              reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    IF              reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    $end            reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    END             reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
-    ELSE            reduce using rule 4 (assign -> IDENTIFIER EQUALS expression .)
+    IDENTIFIER      shift and go to state 60
 
 
 state 44
 
-    (26) opt_params -> expression opt_params .
+    (26) func -> TO IDENTIFIER . opt_args statement END
+    (27) opt_args -> . IDENTIFIER opt_args
+    (28) opt_args -> . empty
+    (35) empty -> .
 
-    IDENTIFIER      reduce using rule 26 (opt_params -> expression opt_params .)
-    OPEN_PAR        reduce using rule 26 (opt_params -> expression opt_params .)
-    MINUS           reduce using rule 26 (opt_params -> expression opt_params .)
-    NUM             reduce using rule 26 (opt_params -> expression opt_params .)
-    COLON           reduce using rule 26 (opt_params -> expression opt_params .)
-    BOOL            reduce using rule 26 (opt_params -> expression opt_params .)
-    NOT             reduce using rule 26 (opt_params -> expression opt_params .)
-    TO              reduce using rule 26 (opt_params -> expression opt_params .)
-    IF              reduce using rule 26 (opt_params -> expression opt_params .)
-    $end            reduce using rule 26 (opt_params -> expression opt_params .)
-    END             reduce using rule 26 (opt_params -> expression opt_params .)
-    ELSE            reduce using rule 26 (opt_params -> expression opt_params .)
+  ! shift/reduce conflict for IDENTIFIER resolved as shift
+    IDENTIFIER      shift and go to state 61
+    IF              reduce using rule 35 (empty -> .)
+    OPEN_PAR        reduce using rule 35 (empty -> .)
+    MINUS           reduce using rule 35 (empty -> .)
+    NUM             reduce using rule 35 (empty -> .)
+    COLON           reduce using rule 35 (empty -> .)
+    BOOL            reduce using rule 35 (empty -> .)
+    NOT             reduce using rule 35 (empty -> .)
+    TO              reduce using rule 35 (empty -> .)
 
+  ! IDENTIFIER      [ reduce using rule 35 (empty -> .) ]
+
+    opt_args                       shift and go to state 62
+    empty                          shift and go to state 63
 
 state 45
 
-    (18) num_expression -> num_expression NUMBER_OP num_expression .
-    (18) num_expression -> num_expression . NUMBER_OP num_expression
+    (6) other_statement -> statement other_statement .
 
-  ! shift/reduce conflict for NUMBER_OP resolved as shift
-    REL_OP          reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    IDENTIFIER      reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    OPEN_PAR        reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    MINUS           reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    NUM             reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    COLON           reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    BOOL            reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    NOT             reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    TO              reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    IF              reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    $end            reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    END             reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    ELSE            reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    CLOSE_PAR       reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    AND_OR          reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .)
-    NUMBER_OP       shift and go to state 27
-
-  ! NUMBER_OP       [ reduce using rule 18 (num_expression -> num_expression NUMBER_OP num_expression .) ]
+    $end            reduce using rule 6 (other_statement -> statement other_statement .)
 
 
 state 46
 
-    (14) bool_expression -> num_expression REL_OP num_expression .
-    (18) num_expression -> num_expression . NUMBER_OP num_expression
+    (5) assign -> IDENTIFIER EQUALS expression .
 
+    IDENTIFIER      reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    IF              reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    OPEN_PAR        reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    MINUS           reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    NUM             reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    COLON           reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    BOOL            reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    NOT             reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    TO              reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    $end            reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    END             reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+    ELSE            reduce using rule 5 (assign -> IDENTIFIER EQUALS expression .)
+
+
+state 47
+
+    (29) opt_params -> expression opt_params .
+
+    IDENTIFIER      reduce using rule 29 (opt_params -> expression opt_params .)
+    IF              reduce using rule 29 (opt_params -> expression opt_params .)
+    OPEN_PAR        reduce using rule 29 (opt_params -> expression opt_params .)
+    MINUS           reduce using rule 29 (opt_params -> expression opt_params .)
+    NUM             reduce using rule 29 (opt_params -> expression opt_params .)
+    COLON           reduce using rule 29 (opt_params -> expression opt_params .)
+    BOOL            reduce using rule 29 (opt_params -> expression opt_params .)
+    NOT             reduce using rule 29 (opt_params -> expression opt_params .)
+    TO              reduce using rule 29 (opt_params -> expression opt_params .)
+    $end            reduce using rule 29 (opt_params -> expression opt_params .)
+    END             reduce using rule 29 (opt_params -> expression opt_params .)
+    ELSE            reduce using rule 29 (opt_params -> expression opt_params .)
+
+
+state 48
+
+    (18) num_expression -> num_expression PLUS num_expression .
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
+
+    PLUS            reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    MINUS           reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    REL_OP          reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    IDENTIFIER      reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    IF              reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    OPEN_PAR        reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    NUM             reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    COLON           reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    BOOL            reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    NOT             reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    TO              reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    $end            reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    END             reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    ELSE            reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    CLOSE_PAR       reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    AND_OR          reduce using rule 18 (num_expression -> num_expression PLUS num_expression .)
+    TIMES           shift and go to state 29
+    DIVIDE          shift and go to state 30
+
+  ! TIMES           [ reduce using rule 18 (num_expression -> num_expression PLUS num_expression .) ]
+  ! DIVIDE          [ reduce using rule 18 (num_expression -> num_expression PLUS num_expression .) ]
+  ! PLUS            [ shift and go to state 27 ]
+  ! MINUS           [ shift and go to state 28 ]
+
+
+state 49
+
+    (19) num_expression -> num_expression MINUS num_expression .
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
+
+    PLUS            reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    MINUS           reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    REL_OP          reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    IDENTIFIER      reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    IF              reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    OPEN_PAR        reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    NUM             reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    COLON           reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    BOOL            reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    NOT             reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    TO              reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    $end            reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    END             reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    ELSE            reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    CLOSE_PAR       reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    AND_OR          reduce using rule 19 (num_expression -> num_expression MINUS num_expression .)
+    TIMES           shift and go to state 29
+    DIVIDE          shift and go to state 30
+
+  ! TIMES           [ reduce using rule 19 (num_expression -> num_expression MINUS num_expression .) ]
+  ! DIVIDE          [ reduce using rule 19 (num_expression -> num_expression MINUS num_expression .) ]
+  ! PLUS            [ shift and go to state 27 ]
+  ! MINUS           [ shift and go to state 28 ]
+
+
+state 50
+
+    (20) num_expression -> num_expression TIMES num_expression .
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
+
+    PLUS            reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    MINUS           reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    TIMES           reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    DIVIDE          reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    REL_OP          reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    IDENTIFIER      reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    IF              reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    OPEN_PAR        reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    NUM             reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    COLON           reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    BOOL            reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    NOT             reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    TO              reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    $end            reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    END             reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    ELSE            reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    CLOSE_PAR       reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+    AND_OR          reduce using rule 20 (num_expression -> num_expression TIMES num_expression .)
+
+  ! PLUS            [ shift and go to state 27 ]
+  ! MINUS           [ shift and go to state 28 ]
+  ! TIMES           [ shift and go to state 29 ]
+  ! DIVIDE          [ shift and go to state 30 ]
+
+
+state 51
+
+    (21) num_expression -> num_expression DIVIDE num_expression .
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
+
+    PLUS            reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    MINUS           reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    TIMES           reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    DIVIDE          reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    REL_OP          reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    IDENTIFIER      reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    IF              reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    OPEN_PAR        reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    NUM             reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    COLON           reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    BOOL            reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    NOT             reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    TO              reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    $end            reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    END             reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    ELSE            reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    CLOSE_PAR       reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+    AND_OR          reduce using rule 21 (num_expression -> num_expression DIVIDE num_expression .)
+
+  ! PLUS            [ shift and go to state 27 ]
+  ! MINUS           [ shift and go to state 28 ]
+  ! TIMES           [ shift and go to state 29 ]
+  ! DIVIDE          [ shift and go to state 30 ]
+
+
+state 52
+
+    (14) bool_expression -> num_expression REL_OP num_expression .
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
+
+  ! shift/reduce conflict for MINUS resolved as shift
     AND_OR          reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     IDENTIFIER      reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
+    IF              reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     OPEN_PAR        reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
-    MINUS           reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     NUM             reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     COLON           reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     BOOL            reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     NOT             reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     TO              reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
-    IF              reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     $end            reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     END             reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     ELSE            reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
     CLOSE_PAR       reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .)
-    NUMBER_OP       shift and go to state 27
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 29
+    DIVIDE          shift and go to state 30
+
+  ! MINUS           [ reduce using rule 14 (bool_expression -> num_expression REL_OP num_expression .) ]
 
 
-state 47
+state 53
 
     (15) bool_expression -> bool_expression AND_OR bool_expression .
     (15) bool_expression -> bool_expression . AND_OR bool_expression
 
   ! shift/reduce conflict for AND_OR resolved as shift
     IDENTIFIER      reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
+    IF              reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
     OPEN_PAR        reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
     MINUS           reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
     NUM             reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
@@ -1183,44 +1420,55 @@ state 47
     BOOL            reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
     NOT             reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
     TO              reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
-    IF              reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
     $end            reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
     END             reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
     ELSE            reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
     CLOSE_PAR       reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .)
-    AND_OR          shift and go to state 29
+    AND_OR          shift and go to state 32
 
   ! AND_OR          [ reduce using rule 15 (bool_expression -> bool_expression AND_OR bool_expression .) ]
 
 
-state 48
+state 54
 
-    (19) num_expression -> OPEN_PAR num_expression CLOSE_PAR .
+    (32) if -> IF OPEN_PAR bool_expression . CLOSE_PAR THEN statement possible_else END
+    (15) bool_expression -> bool_expression . AND_OR bool_expression
 
-    NUMBER_OP       reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    REL_OP          reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    IDENTIFIER      reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    OPEN_PAR        reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    MINUS           reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    NUM             reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    COLON           reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    BOOL            reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    NOT             reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    TO              reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    IF              reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    $end            reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    END             reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    ELSE            reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    CLOSE_PAR       reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
-    AND_OR          reduce using rule 19 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    CLOSE_PAR       shift and go to state 64
+    AND_OR          shift and go to state 32
 
 
-state 49
+state 55
+
+    (22) num_expression -> OPEN_PAR num_expression CLOSE_PAR .
+
+    PLUS            reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    MINUS           reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    TIMES           reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    DIVIDE          reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    REL_OP          reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    IDENTIFIER      reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    IF              reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    OPEN_PAR        reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    NUM             reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    COLON           reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    BOOL            reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    NOT             reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    TO              reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    $end            reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    END             reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    ELSE            reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    CLOSE_PAR       reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+    AND_OR          reduce using rule 22 (num_expression -> OPEN_PAR num_expression CLOSE_PAR .)
+
+
+state 56
 
     (16) bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .
 
     AND_OR          reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     IDENTIFIER      reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
+    IF              reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     OPEN_PAR        reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     MINUS           reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     NUM             reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
@@ -1228,63 +1476,78 @@ state 49
     BOOL            reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     NOT             reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     TO              reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
-    IF              reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     $end            reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     END             reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     ELSE            reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
     CLOSE_PAR       reduce using rule 16 (bool_expression -> OPEN_PAR bool_expression CLOSE_PAR .)
 
 
-state 50
+state 57
 
-    (19) num_expression -> OPEN_PAR num_expression . CLOSE_PAR
-    (18) num_expression -> num_expression . NUMBER_OP num_expression
+    (22) num_expression -> OPEN_PAR num_expression . CLOSE_PAR
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
 
-    CLOSE_PAR       shift and go to state 48
-    NUMBER_OP       shift and go to state 27
-
-
-state 51
-
-    (22) num_expression -> COLON IDENTIFIER .
-
-    NUMBER_OP       reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    REL_OP          reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    IDENTIFIER      reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    OPEN_PAR        reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    MINUS           reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    NUM             reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    COLON           reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    BOOL            reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    NOT             reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    TO              reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    IF              reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    $end            reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    END             reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    ELSE            reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    CLOSE_PAR       reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    AND_OR          reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
+    CLOSE_PAR       shift and go to state 55
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 29
+    DIVIDE          shift and go to state 30
 
 
-state 52
+state 58
 
-    (19) num_expression -> OPEN_PAR num_expression . CLOSE_PAR
+    (25) num_expression -> COLON IDENTIFIER .
+
+    PLUS            reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    MINUS           reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    TIMES           reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    DIVIDE          reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    REL_OP          reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    IDENTIFIER      reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    IF              reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    OPEN_PAR        reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    NUM             reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    COLON           reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    BOOL            reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    NOT             reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    TO              reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    $end            reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    END             reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    ELSE            reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    CLOSE_PAR       reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    AND_OR          reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+
+
+state 59
+
+    (22) num_expression -> OPEN_PAR num_expression . CLOSE_PAR
     (14) bool_expression -> num_expression . REL_OP num_expression
-    (18) num_expression -> num_expression . NUMBER_OP num_expression
+    (18) num_expression -> num_expression . PLUS num_expression
+    (19) num_expression -> num_expression . MINUS num_expression
+    (20) num_expression -> num_expression . TIMES num_expression
+    (21) num_expression -> num_expression . DIVIDE num_expression
 
-    CLOSE_PAR       shift and go to state 48
-    REL_OP          shift and go to state 28
-    NUMBER_OP       shift and go to state 27
+    CLOSE_PAR       shift and go to state 55
+    REL_OP          shift and go to state 31
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 29
+    DIVIDE          shift and go to state 30
 
 
-state 53
+state 60
 
     (17) bool_expression -> COLON IDENTIFIER .
-    (22) num_expression -> COLON IDENTIFIER .
+    (25) num_expression -> COLON IDENTIFIER .
 
+  ! reduce/reduce conflict for MINUS resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
   ! reduce/reduce conflict for CLOSE_PAR resolved using rule 17 (bool_expression -> COLON IDENTIFIER .)
     AND_OR          reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     IDENTIFIER      reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
+    IF              reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     OPEN_PAR        reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     MINUS           reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     NUM             reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
@@ -1292,316 +1555,318 @@ state 53
     BOOL            reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     NOT             reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     TO              reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
-    IF              reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     $end            reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     END             reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     ELSE            reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
     CLOSE_PAR       reduce using rule 17 (bool_expression -> COLON IDENTIFIER .)
-    REL_OP          reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
-    NUMBER_OP       reduce using rule 22 (num_expression -> COLON IDENTIFIER .)
+    REL_OP          reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    PLUS            reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    TIMES           reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
+    DIVIDE          reduce using rule 25 (num_expression -> COLON IDENTIFIER .)
 
-  ! CLOSE_PAR       [ reduce using rule 22 (num_expression -> COLON IDENTIFIER .) ]
-
-
-state 54
-
-    (24) opt_args -> IDENTIFIER . opt_args
-    (24) opt_args -> . IDENTIFIER opt_args
-    (25) opt_args -> . empty
-    (32) empty -> .
-
-  ! shift/reduce conflict for IDENTIFIER resolved as shift
-    IDENTIFIER      shift and go to state 54
-    OPEN_PAR        reduce using rule 32 (empty -> .)
-    MINUS           reduce using rule 32 (empty -> .)
-    NUM             reduce using rule 32 (empty -> .)
-    COLON           reduce using rule 32 (empty -> .)
-    BOOL            reduce using rule 32 (empty -> .)
-    NOT             reduce using rule 32 (empty -> .)
-    TO              reduce using rule 32 (empty -> .)
-    IF              reduce using rule 32 (empty -> .)
-
-  ! IDENTIFIER      [ reduce using rule 32 (empty -> .) ]
-
-    opt_args                       shift and go to state 58
-    empty                          shift and go to state 56
-
-state 55
-
-    (23) func -> TO IDENTIFIER opt_args . statement END
-    (2) statement -> . assign
-    (3) statement -> . expression
-    (4) assign -> . IDENTIFIER EQUALS expression
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
-    (12) bool_expression -> . BOOL
-    (13) bool_expression -> . NOT bool_expression
-    (14) bool_expression -> . num_expression REL_OP num_expression
-    (15) bool_expression -> . bool_expression AND_OR bool_expression
-    (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
-    (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
-
-    IDENTIFIER      shift and go to state 5
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
-    IF              shift and go to state 18
-
-    statement                      shift and go to state 59
-    assign                         shift and go to state 3
-    expression                     shift and go to state 4
-    num_expression                 shift and go to state 6
-    bool_expression                shift and go to state 7
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
-
-state 56
-
-    (25) opt_args -> empty .
-
-    IDENTIFIER      reduce using rule 25 (opt_args -> empty .)
-    OPEN_PAR        reduce using rule 25 (opt_args -> empty .)
-    MINUS           reduce using rule 25 (opt_args -> empty .)
-    NUM             reduce using rule 25 (opt_args -> empty .)
-    COLON           reduce using rule 25 (opt_args -> empty .)
-    BOOL            reduce using rule 25 (opt_args -> empty .)
-    NOT             reduce using rule 25 (opt_args -> empty .)
-    TO              reduce using rule 25 (opt_args -> empty .)
-    IF              reduce using rule 25 (opt_args -> empty .)
-
-
-state 57
-
-    (29) if -> IF OPEN_PAR bool_expression . CLOSE_PAR THEN statement possible_else END
-    (15) bool_expression -> bool_expression . AND_OR bool_expression
-
-    CLOSE_PAR       shift and go to state 60
-    AND_OR          shift and go to state 29
-
-
-state 58
-
-    (24) opt_args -> IDENTIFIER opt_args .
-
-    IDENTIFIER      reduce using rule 24 (opt_args -> IDENTIFIER opt_args .)
-    OPEN_PAR        reduce using rule 24 (opt_args -> IDENTIFIER opt_args .)
-    MINUS           reduce using rule 24 (opt_args -> IDENTIFIER opt_args .)
-    NUM             reduce using rule 24 (opt_args -> IDENTIFIER opt_args .)
-    COLON           reduce using rule 24 (opt_args -> IDENTIFIER opt_args .)
-    BOOL            reduce using rule 24 (opt_args -> IDENTIFIER opt_args .)
-    NOT             reduce using rule 24 (opt_args -> IDENTIFIER opt_args .)
-    TO              reduce using rule 24 (opt_args -> IDENTIFIER opt_args .)
-    IF              reduce using rule 24 (opt_args -> IDENTIFIER opt_args .)
-
-
-state 59
-
-    (23) func -> TO IDENTIFIER opt_args statement . END
-
-    END             shift and go to state 61
-
-
-state 60
-
-    (29) if -> IF OPEN_PAR bool_expression CLOSE_PAR . THEN statement possible_else END
-
-    THEN            shift and go to state 62
+  ! MINUS           [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
+  ! CLOSE_PAR       [ reduce using rule 25 (num_expression -> COLON IDENTIFIER .) ]
 
 
 state 61
 
-    (23) func -> TO IDENTIFIER opt_args statement END .
+    (27) opt_args -> IDENTIFIER . opt_args
+    (27) opt_args -> . IDENTIFIER opt_args
+    (28) opt_args -> . empty
+    (35) empty -> .
 
-    IDENTIFIER      reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    OPEN_PAR        reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    MINUS           reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    NUM             reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    COLON           reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    BOOL            reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    NOT             reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    TO              reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    IF              reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    $end            reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    END             reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
-    ELSE            reduce using rule 23 (func -> TO IDENTIFIER opt_args statement END .)
+  ! shift/reduce conflict for IDENTIFIER resolved as shift
+    IDENTIFIER      shift and go to state 61
+    IF              reduce using rule 35 (empty -> .)
+    OPEN_PAR        reduce using rule 35 (empty -> .)
+    MINUS           reduce using rule 35 (empty -> .)
+    NUM             reduce using rule 35 (empty -> .)
+    COLON           reduce using rule 35 (empty -> .)
+    BOOL            reduce using rule 35 (empty -> .)
+    NOT             reduce using rule 35 (empty -> .)
+    TO              reduce using rule 35 (empty -> .)
 
+  ! IDENTIFIER      [ reduce using rule 35 (empty -> .) ]
+
+    opt_args                       shift and go to state 65
+    empty                          shift and go to state 63
 
 state 62
 
-    (29) if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN . statement possible_else END
+    (26) func -> TO IDENTIFIER opt_args . statement END
     (2) statement -> . assign
     (3) statement -> . expression
-    (4) assign -> . IDENTIFIER EQUALS expression
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (4) statement -> . if
+    (5) assign -> . IDENTIFIER EQUALS expression
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (32) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
 
-    IDENTIFIER      shift and go to state 5
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
-    IF              shift and go to state 18
+    IDENTIFIER      shift and go to state 6
+    IF              shift and go to state 11
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
 
-    bool_expression                shift and go to state 7
-    statement                      shift and go to state 63
+    statement                      shift and go to state 66
     assign                         shift and go to state 3
     expression                     shift and go to state 4
-    num_expression                 shift and go to state 6
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
+    if                             shift and go to state 5
+    num_expression                 shift and go to state 7
+    bool_expression                shift and go to state 8
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
 
 state 63
 
-    (29) if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement . possible_else END
-    (30) possible_else -> . ELSE statement END
-    (31) possible_else -> . empty
-    (32) empty -> .
+    (28) opt_args -> empty .
 
-    ELSE            shift and go to state 65
-    END             reduce using rule 32 (empty -> .)
+    IDENTIFIER      reduce using rule 28 (opt_args -> empty .)
+    IF              reduce using rule 28 (opt_args -> empty .)
+    OPEN_PAR        reduce using rule 28 (opt_args -> empty .)
+    MINUS           reduce using rule 28 (opt_args -> empty .)
+    NUM             reduce using rule 28 (opt_args -> empty .)
+    COLON           reduce using rule 28 (opt_args -> empty .)
+    BOOL            reduce using rule 28 (opt_args -> empty .)
+    NOT             reduce using rule 28 (opt_args -> empty .)
+    TO              reduce using rule 28 (opt_args -> empty .)
 
-    possible_else                  shift and go to state 64
-    empty                          shift and go to state 66
 
 state 64
 
-    (29) if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else . END
+    (32) if -> IF OPEN_PAR bool_expression CLOSE_PAR . THEN statement possible_else END
 
-    END             shift and go to state 67
+    THEN            shift and go to state 67
 
 
 state 65
 
-    (30) possible_else -> ELSE . statement END
+    (27) opt_args -> IDENTIFIER opt_args .
+
+    IDENTIFIER      reduce using rule 27 (opt_args -> IDENTIFIER opt_args .)
+    IF              reduce using rule 27 (opt_args -> IDENTIFIER opt_args .)
+    OPEN_PAR        reduce using rule 27 (opt_args -> IDENTIFIER opt_args .)
+    MINUS           reduce using rule 27 (opt_args -> IDENTIFIER opt_args .)
+    NUM             reduce using rule 27 (opt_args -> IDENTIFIER opt_args .)
+    COLON           reduce using rule 27 (opt_args -> IDENTIFIER opt_args .)
+    BOOL            reduce using rule 27 (opt_args -> IDENTIFIER opt_args .)
+    NOT             reduce using rule 27 (opt_args -> IDENTIFIER opt_args .)
+    TO              reduce using rule 27 (opt_args -> IDENTIFIER opt_args .)
+
+
+state 66
+
+    (26) func -> TO IDENTIFIER opt_args statement . END
+
+    END             shift and go to state 68
+
+
+state 67
+
+    (32) if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN . statement possible_else END
     (2) statement -> . assign
     (3) statement -> . expression
-    (4) assign -> . IDENTIFIER EQUALS expression
-    (7) expression -> . num_expression
-    (8) expression -> . bool_expression
-    (9) expression -> . func
-    (10) expression -> . call_func
-    (11) expression -> . if
-    (18) num_expression -> . num_expression NUMBER_OP num_expression
-    (19) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
-    (20) num_expression -> . MINUS num_expression
-    (21) num_expression -> . NUM
-    (22) num_expression -> . COLON IDENTIFIER
+    (4) statement -> . if
+    (5) assign -> . IDENTIFIER EQUALS expression
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (32) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
     (12) bool_expression -> . BOOL
     (13) bool_expression -> . NOT bool_expression
     (14) bool_expression -> . num_expression REL_OP num_expression
     (15) bool_expression -> . bool_expression AND_OR bool_expression
     (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
     (17) bool_expression -> . COLON IDENTIFIER
-    (23) func -> . TO IDENTIFIER opt_args statement END
-    (28) call_func -> . IDENTIFIER opt_params
-    (29) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
 
-    IDENTIFIER      shift and go to state 5
-    OPEN_PAR        shift and go to state 11
-    MINUS           shift and go to state 12
-    NUM             shift and go to state 13
-    COLON           shift and go to state 14
-    BOOL            shift and go to state 15
-    NOT             shift and go to state 16
-    TO              shift and go to state 17
-    IF              shift and go to state 18
+    IDENTIFIER      shift and go to state 6
+    IF              shift and go to state 11
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
 
-    statement                      shift and go to state 68
+    bool_expression                shift and go to state 8
+    statement                      shift and go to state 69
     assign                         shift and go to state 3
     expression                     shift and go to state 4
-    num_expression                 shift and go to state 6
-    bool_expression                shift and go to state 7
-    func                           shift and go to state 8
-    call_func                      shift and go to state 9
-    if                             shift and go to state 10
-
-state 66
-
-    (31) possible_else -> empty .
-
-    END             reduce using rule 31 (possible_else -> empty .)
-
-
-state 67
-
-    (29) if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .
-
-    IDENTIFIER      reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    OPEN_PAR        reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    MINUS           reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    NUM             reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    COLON           reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    BOOL            reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    NOT             reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    TO              reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    IF              reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    $end            reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    END             reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-    ELSE            reduce using rule 29 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
-
+    if                             shift and go to state 5
+    num_expression                 shift and go to state 7
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
 
 state 68
 
-    (30) possible_else -> ELSE statement . END
+    (26) func -> TO IDENTIFIER opt_args statement END .
 
-    END             shift and go to state 69
+    IDENTIFIER      reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    IF              reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    OPEN_PAR        reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    MINUS           reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    NUM             reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    COLON           reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    BOOL            reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    NOT             reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    TO              reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    $end            reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    END             reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
+    ELSE            reduce using rule 26 (func -> TO IDENTIFIER opt_args statement END .)
 
 
 state 69
 
-    (30) possible_else -> ELSE statement END .
+    (32) if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement . possible_else END
+    (33) possible_else -> . ELSE statement END
+    (34) possible_else -> . empty
+    (35) empty -> .
 
-    END             reduce using rule 30 (possible_else -> ELSE statement END .)
+    ELSE            shift and go to state 71
+    END             reduce using rule 35 (empty -> .)
+
+    possible_else                  shift and go to state 70
+    empty                          shift and go to state 72
+
+state 70
+
+    (32) if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else . END
+
+    END             shift and go to state 73
+
+
+state 71
+
+    (33) possible_else -> ELSE . statement END
+    (2) statement -> . assign
+    (3) statement -> . expression
+    (4) statement -> . if
+    (5) assign -> . IDENTIFIER EQUALS expression
+    (8) expression -> . num_expression
+    (9) expression -> . bool_expression
+    (10) expression -> . func
+    (11) expression -> . call_func
+    (32) if -> . IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END
+    (18) num_expression -> . num_expression PLUS num_expression
+    (19) num_expression -> . num_expression MINUS num_expression
+    (20) num_expression -> . num_expression TIMES num_expression
+    (21) num_expression -> . num_expression DIVIDE num_expression
+    (22) num_expression -> . OPEN_PAR num_expression CLOSE_PAR
+    (23) num_expression -> . MINUS num_expression
+    (24) num_expression -> . NUM
+    (25) num_expression -> . COLON IDENTIFIER
+    (12) bool_expression -> . BOOL
+    (13) bool_expression -> . NOT bool_expression
+    (14) bool_expression -> . num_expression REL_OP num_expression
+    (15) bool_expression -> . bool_expression AND_OR bool_expression
+    (16) bool_expression -> . OPEN_PAR bool_expression CLOSE_PAR
+    (17) bool_expression -> . COLON IDENTIFIER
+    (26) func -> . TO IDENTIFIER opt_args statement END
+    (31) call_func -> . IDENTIFIER opt_params
+
+    IDENTIFIER      shift and go to state 6
+    IF              shift and go to state 11
+    OPEN_PAR        shift and go to state 12
+    MINUS           shift and go to state 13
+    NUM             shift and go to state 14
+    COLON           shift and go to state 15
+    BOOL            shift and go to state 16
+    NOT             shift and go to state 17
+    TO              shift and go to state 18
+
+    statement                      shift and go to state 74
+    assign                         shift and go to state 3
+    expression                     shift and go to state 4
+    if                             shift and go to state 5
+    num_expression                 shift and go to state 7
+    bool_expression                shift and go to state 8
+    func                           shift and go to state 9
+    call_func                      shift and go to state 10
+
+state 72
+
+    (34) possible_else -> empty .
+
+    END             reduce using rule 34 (possible_else -> empty .)
+
+
+state 73
+
+    (32) if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .
+
+    IDENTIFIER      reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    IF              reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    OPEN_PAR        reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    MINUS           reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    NUM             reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    COLON           reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    BOOL            reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    NOT             reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    TO              reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    $end            reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    END             reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+    ELSE            reduce using rule 32 (if -> IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END .)
+
+
+state 74
+
+    (33) possible_else -> ELSE statement . END
+
+    END             shift and go to state 75
+
+
+state 75
+
+    (33) possible_else -> ELSE statement END .
+
+    END             reduce using rule 33 (possible_else -> ELSE statement END .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for OPEN_PAR in state 5 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 5 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 5 resolved as shift
-WARNING: shift/reduce conflict for COLON in state 5 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 5 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 5 resolved as shift
-WARNING: shift/reduce conflict for TO in state 5 resolved as shift
-WARNING: shift/reduce conflict for IDENTIFIER in state 5 resolved as shift
-WARNING: shift/reduce conflict for IF in state 5 resolved as shift
+WARNING: shift/reduce conflict for OPEN_PAR in state 6 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 6 resolved as shift
+WARNING: shift/reduce conflict for NUM in state 6 resolved as shift
+WARNING: shift/reduce conflict for COLON in state 6 resolved as shift
+WARNING: shift/reduce conflict for BOOL in state 6 resolved as shift
+WARNING: shift/reduce conflict for NOT in state 6 resolved as shift
+WARNING: shift/reduce conflict for TO in state 6 resolved as shift
+WARNING: shift/reduce conflict for IDENTIFIER in state 6 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 7 resolved as shift
 WARNING: shift/reduce conflict for OPEN_PAR in state 22 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 22 resolved as shift
 WARNING: shift/reduce conflict for NUM in state 22 resolved as shift
@@ -1610,7 +1875,6 @@ WARNING: shift/reduce conflict for BOOL in state 22 resolved as shift
 WARNING: shift/reduce conflict for NOT in state 22 resolved as shift
 WARNING: shift/reduce conflict for TO in state 22 resolved as shift
 WARNING: shift/reduce conflict for IDENTIFIER in state 22 resolved as shift
-WARNING: shift/reduce conflict for IF in state 22 resolved as shift
 WARNING: shift/reduce conflict for OPEN_PAR in state 24 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 24 resolved as shift
 WARNING: shift/reduce conflict for NUM in state 24 resolved as shift
@@ -1619,14 +1883,12 @@ WARNING: shift/reduce conflict for BOOL in state 24 resolved as shift
 WARNING: shift/reduce conflict for NOT in state 24 resolved as shift
 WARNING: shift/reduce conflict for TO in state 24 resolved as shift
 WARNING: shift/reduce conflict for IDENTIFIER in state 24 resolved as shift
-WARNING: shift/reduce conflict for IF in state 24 resolved as shift
-WARNING: shift/reduce conflict for NUMBER_OP in state 32 resolved as shift
-WARNING: shift/reduce conflict for AND_OR in state 36 resolved as shift
-WARNING: shift/reduce conflict for IDENTIFIER in state 40 resolved as shift
-WARNING: shift/reduce conflict for NUMBER_OP in state 45 resolved as shift
-WARNING: shift/reduce conflict for AND_OR in state 47 resolved as shift
-WARNING: shift/reduce conflict for IDENTIFIER in state 54 resolved as shift
-WARNING: reduce/reduce conflict in state 35 resolved using rule (bool_expression -> COLON IDENTIFIER)
-WARNING: rejected rule (num_expression -> COLON IDENTIFIER) in state 35
-WARNING: reduce/reduce conflict in state 53 resolved using rule (bool_expression -> COLON IDENTIFIER)
-WARNING: rejected rule (num_expression -> COLON IDENTIFIER) in state 53
+WARNING: shift/reduce conflict for AND_OR in state 40 resolved as shift
+WARNING: shift/reduce conflict for IDENTIFIER in state 44 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 52 resolved as shift
+WARNING: shift/reduce conflict for AND_OR in state 53 resolved as shift
+WARNING: shift/reduce conflict for IDENTIFIER in state 61 resolved as shift
+WARNING: reduce/reduce conflict in state 39 resolved using rule (bool_expression -> COLON IDENTIFIER)
+WARNING: rejected rule (num_expression -> COLON IDENTIFIER) in state 39
+WARNING: reduce/reduce conflict in state 60 resolved using rule (bool_expression -> COLON IDENTIFIER)
+WARNING: rejected rule (num_expression -> COLON IDENTIFIER) in state 60

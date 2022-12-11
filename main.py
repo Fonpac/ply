@@ -40,7 +40,16 @@ t_END = 'END'
 t_OPEN_PAR = '\('
 t_CLOSE_PAR = '\)'
 
+
+def write_function(length):
+    return [f'PUSH {length}', f'CALL WRITE']
+
+
 symbol_table = {
+    'WRITE': {
+        'value': write_function,
+        'id_type': 'function'
+    }
 }
 
 
@@ -95,31 +104,22 @@ def p_error(p):
 
 def p_program(p):
     '''program : statement other_statement'''
-    node = new_node("program")
-    append_node(node, p[1])
-    if p[2]:
-        append_node(node, p[2])
-    p[0] = p[1]
+    p[0] = p[1] + p[2]
 
 
 def p_statement(p):
     '''statement : assign
                  | expression
+                 | if
     '''
-    node = new_node("statement")
-    append_node(node, p[1])
     p[0] = p[1]
 
 
 def p_assign(p):
     '''assign : IDENTIFIER EQUALS expression'''
-    # node = new_node("assign")
-    # append_node(node, new_leaf("SET " + p.slice[1].type, value=p[1]))
-    # append_node(node, new_leaf(p.slice[2].type, value=p[2]))
-    # append_node(node, p[3])
     symbol_table[p[1]] = {
         "id_type": "var",
-        "value": re.findall('[0-9]+', p[3][0])[0]
+        "value": p[3][0].split()[1]
     }
     p[0] = p[3] + [f"STORE {p[1]}"]
 
@@ -129,11 +129,9 @@ def p_other_statement(p):
                        | empty
     '''
     if p[1]:
-        node = new_node("other_statement")
-        append_node(node, p[1])
-        if p[2]:
-            append_node(node, p[2])
-        p[0] = node
+        p[0] = p[1] + p[2]
+    else:
+        p[0] = []
 
 
 def p_expression(p):
@@ -141,10 +139,7 @@ def p_expression(p):
                   | bool_expression
                   | func
                   | call_func
-                  | if
     '''
-    node = new_node("expression")
-    append_node(node, p[1])
     p[0] = p[1]
 
 
@@ -192,10 +187,7 @@ def p_bool_expression_bool_expression(p):
 
 def p_bool_expression_identifier(p):
     '''bool_expression : COLON IDENTIFIER'''
-    node = new_node("bool_expression")
-    append_node(node, new_leaf(
-        "GET " + p.slice[2].type, value=p[2]))
-    p[0] = node
+    p[0] = [f"load {p[2]}"]
 
 
 def p_num_expression(p):
@@ -242,10 +234,7 @@ def p_num_expression_num(p):
 
 def p_num_expression_identifier(p):
     '''num_expression : COLON IDENTIFIER'''
-    node = new_node("num_expression")
-    append_node(node, new_leaf(
-        "GET " + p.slice[2].type, value=p[2]))
-    p[0] = node
+    p[0] = [f"load {p[2]}"]
 
 
 def p_func(p):
@@ -273,21 +262,17 @@ def p_opt_args(p):
 
 def p_opt_params(p):
     '''opt_params : expression opt_params
-                | empty'''
-    node = new_node("opt_params")
+                  | empty'''
+    print(p[1])
     if p[1]:
-        append_node(node, p[1])
-        if len(p[2]['children']) > 0:
-            append_node(node, p[2])
-    p[0] = node
+        p[0] = p[1] + p[2]
+    else:
+        p[0] = []
 
 
 def p_call_func(p):
     '''call_func : IDENTIFIER opt_params'''
-    node = new_node("call_func")
-    append_node(node, new_leaf("GET " + p.slice[1].type, value=p[1]))
-    append_node(node, p[2])
-    p[0] = node
+    p[0] = p[2] + symbol_table['WRITE']['value'](len(p[2]))
 
 
 def p_if(p):
@@ -327,15 +312,18 @@ lexer = lex()
 parser = yacc()
 
 ast = parser.parse('''
-                    a = 2 + 2
+                    a = 2
+                    b = :a + 3
+                    WRITE :b
                    ''',
                    lexer=lexer, tracking=False)
 
 start = [':START __main__']
 data = ['.DATA']
 for symbol in symbol_table:
-    value = symbol_table.get(symbol).get("value")
-    data.append(f"{symbol} {value}")
+    if (symbol_table.get(symbol).get('id_type') == 'var'):
+        value = symbol_table.get(symbol).get("value")
+        data.append(f"{symbol} {value}")
 
 code = ['.CODE', 'def __main__:']
 halt = ["HALT"]
