@@ -271,7 +271,7 @@ def p_opt_params(p):
 
 def p_call_func(p):
     '''call_func : IDENTIFIER opt_params'''
-    p[0] = p[2] + symbol_table['WRITE']['value'](len(p[2]))
+    p[0] = p[2] + symbol_table[p[1]]['value'](len(p[2]))
 
 
 def p_if(p):
