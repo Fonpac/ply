@@ -45,7 +45,7 @@ t_CLOSE_PAR = '\)'
 
 
 def write_function(length):
-    return [f'PUSH {length}', f'CALL WRITE']
+    return [f'\tPUSH {length}', f'\tCALL WRITE']
 
 
 symbol_table = {
@@ -124,7 +124,7 @@ def p_assign(p):
         "id_type": "var",
         "value": p[3][0].split()[1]
     }
-    p[0] = p[3] + [f"STOR {p[1]}"]
+    p[0] = p[3] + [f"\tSTOR {p[1]}"]
 
 
 def p_other_statement(p):
@@ -181,16 +181,12 @@ def p_bool_expression_and_or(p):
 
 def p_bool_expression_bool_expression(p):
     '''bool_expression : OPEN_PAR bool_expression CLOSE_PAR'''
-    node = new_node("bool_expression")
-    append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    append_node(node, p[2])
-    append_node(node, new_leaf(p.slice[3].type, value=p[3]))
-    p[0] = node
+    p[0] = p[2]
 
 
 def p_bool_expression_identifier(p):
     '''bool_expression : COLON IDENTIFIER'''
-    p[0] = [f"LOAD {p[2]}"]
+    p[0] = [f"\tLOAD {p[2]}"]
 
 
 def p_num_expression(p):
@@ -201,11 +197,11 @@ def p_num_expression(p):
                       | num_expression POWER num_expression
     '''
     p[0] = p[1] + p[3] + [{
-        "+": "ADD",
-        "*": "MUL",
-        "-": "SUB",
-        "/": "DIV",
-        "^": "POW"
+        "+": "\tADD",
+        "*": "\tMUL",
+        "-": "\tSUB",
+        "/": "\tDIV",
+        "^": "\tPOW"
     }[p[2]]]
 
 
@@ -216,45 +212,68 @@ def p_num_expression_parenthesis(p):
 
 def p_num_expression_minus(p):
     '''num_expression : MINUS num_expression'''
-    node = new_node("num_expression")
-    append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    append_node(node, p[2])
-    p[0] = [f"PUSH -{p[1]}"]
+    p[0] = [f"\tPUSH -{p[1]}"]
 
 
 def p_num_expression_num(p):
     '''num_expression : NUM'''
-    node = new_node("num_expression")
-    append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    p[0] = [f"PUSH {p[1]}"]
+    p[0] = [f"\tPUSH {p[1]}"]
 
 
 def p_num_expression_identifier(p):
     '''num_expression : COLON IDENTIFIER'''
-    p[0] = [f"LOAD {p[2]}"]
+    p[0] = [f"\tLOAD {p[2]}"]
 
 
 def p_func(p):
-    'func : TO IDENTIFIER opt_args statement END'
+    'func : TO IDENTIFIER OPEN_PAR opt_args CLOSE_PAR program END'
+    args = []
+    statements = [f"def {p[2]}:"]
 
-    node = new_node("func")
-    append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    append_node(node, new_leaf("SET " + p.slice[2].type, value=p[2]))
-    append_node(node, p[3])
-    append_node(node, p[4])
-    append_node(node, new_leaf(p.slice[5].type, value=p[5]))
-    p[0] = [f"DEF {p[2]}:"]
+    for arg in p[4]:
+        args.append(f"{p[2]}_{arg}")
+
+    for statement in p[6]:
+        if 'LOAD' in statement:
+            splitted = statement.split(' ')
+            real_value = None
+            print(statement)
+            for arg in args:
+                if splitted[1] == arg.split('_')[1]:
+                    real_value = arg
+            if real_value is None:
+                real_value = f'{p[2]}_{splitted[1]}'
+            statements.append(f"\tLOAD {real_value}")
+            symbol_table[real_value] = {
+                "id_type": "var",
+                "value": '0'
+            }
+        elif 'STOR' in statement:
+            splitted = statement.split(' ')
+            value_to_append = f'{p[2]}_{splitted[1]}'
+            symbol_table[value_to_append] = {
+                "id_type": "var",
+                "value": '0'
+            }
+            statements.append(f'\tSTOR {value_to_append}')
+        else:
+            statements.append(statement)
+    statements.append('\tRET')
+    symbol_table[p[2]] = {
+        "id_type": "custom_func",
+        'args': args,
+        'value': statements
+    }
+    p[0] = []
 
 
 def p_opt_args(p):
     '''opt_args : IDENTIFIER opt_args
                 | empty'''
-    node = new_node("opt_args")
     if p[1]:
-        append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-        if len(p[2]['children']) > 0:
-            append_node(node, p[2])
-    p[0] = node
+        p[0] = [p[1]] + p[2]
+    else:
+        p[0] = []
 
 
 def p_opt_params(p):
@@ -268,7 +287,16 @@ def p_opt_params(p):
 
 def p_call_func(p):
     '''call_func : IDENTIFIER opt_params'''
-    p[0] = p[2] + symbol_table[p[1]]['value'](len(p[2]))
+    func = symbol_table[p[1]]
+    if func['id_type'] == 'custom_func':
+        func_execution = []
+        for i in range(len(func['args'])):
+            func_execution.append(p[2][i])
+            func_execution.append(f"\tSTOR {func['args'][i]}")
+        func_execution += [f'\tCALL {p[1]}']
+        p[0] = func_execution
+    else:
+        p[0] = p[2] + func['value'](len(p[2]))
 
 
 def p_if(p):
@@ -308,25 +336,34 @@ lexer = lex()
 parser = yacc()
 
 ast = parser.parse('''
-                    IF (1 > 2) THEN
-                    1 + 1
+                    TO SUM (a b) 
+                        c = :a + :b
+                        WRITE :c
                     END
+
+                    SUM 5 6
                    ''',
                    lexer=lexer, tracking=False)
 
 start = ['.START __main__']
-data = ['.DATA']
+funcs = ["", "", ]
+data = ["", '.DATA']
 for symbol in symbol_table:
-    if (symbol_table.get(symbol).get('id_type') == 'var'):
+    type_id = symbol_table.get(symbol).get('id_type')
+    if type_id == 'var':
         value = symbol_table.get(symbol).get("value")
-        data.append(f"{symbol} {value if value.isdecimal() else 0}")
+        data.append(f"\t{symbol} {value if value.isdecimal() else 0}")
+    elif type_id == 'custom_func':
+        value = symbol_table.get(symbol).get("value")
+        funcs += value
 
-code = ['.CODE', 'def __main__:']
-halt = ["HALT"]
 
-tudo = start + data + code + ast + halt
-print(yaml.dump(tudo, sort_keys=False, indent=2))
+code = ["", '.CODE', 'def __main__:']
+halt = ["\tHALT"]
+
+logo_code = start + data + code + ast + halt + funcs
+print(yaml.dump(logo_code, sort_keys=False, indent=2))
 file = open("../logovm/examples/teste.lasm", 'w')
 
-for x in tudo:
+for x in logo_code:
     file.write(x + '\n')
