@@ -121,7 +121,7 @@ def p_assign(p):
         "id_type": "var",
         "value": p[3][0].split()[1]
     }
-    p[0] = p[3] + [f"STORE {p[1]}"]
+    p[0] = p[3] + [f"STOR {p[1]}"]
 
 
 def p_other_statement(p):
@@ -318,15 +318,19 @@ ast = parser.parse('''
                    ''',
                    lexer=lexer, tracking=False)
 
-start = [':START __main__']
+start = ['.START __main__']
 data = ['.DATA']
 for symbol in symbol_table:
     if (symbol_table.get(symbol).get('id_type') == 'var'):
         value = symbol_table.get(symbol).get("value")
-        data.append(f"{symbol} {value}")
+        data.append(f"{symbol} {0}")
 
 code = ['.CODE', 'def __main__:']
 halt = ["HALT"]
 
 tudo = start + data + code + ast + halt
 print(yaml.dump(tudo, sort_keys=False, indent=2))
+file = open("myfile.txt", 'w')
+
+for x in tudo:
+    file.write(x.upper() + '\n')
