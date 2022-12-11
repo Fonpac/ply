@@ -5,6 +5,8 @@ import re
 
 from node import new_leaf, new_node, append_node
 
+counter_if_name = 1
+
 reserved_words = {
     'TRUE': 'BOOL',
     'FALSE': 'BOOL',
@@ -165,7 +167,7 @@ def p_bool_expression_rel_op(p):
     append_node(node, p[1])
     append_node(node, new_leaf(p.slice[2].type, value=p[2]))
     append_node(node, p[3])
-    p[0] = node
+    p[0] = p[1] + p[3] + ["cmp"]
 
 
 def p_bool_expression_and_or(p):
@@ -174,7 +176,7 @@ def p_bool_expression_and_or(p):
     append_node(node, p[1])
     append_node(node, new_leaf(p.slice[2].type, value=p[2]))
     append_node(node, p[3])
-    p[0] = node
+    p[0] = p[1] + p[3]
 
 
 def p_bool_expression_bool_expression(p):
@@ -280,7 +282,7 @@ def p_if(p):
     append_node(node, p[6])
     append_node(node, p[7])
     append_node(node, new_leaf(p.slice[8].type, value=p[8]))
-    p[0] = node
+    p[0] = p[3] + [":ifjump"] + p[6]
 
 
 def p_possible_else(p):
@@ -306,10 +308,9 @@ lexer = lex()
 parser = yacc()
 
 ast = parser.parse('''
-                    b = 3
-                    a = :b ^ 2
-                    c = 4 * (:a + :b)
-                    WRITE :c 
+                    IF (1 > 2) THEN
+                    1 + 1
+                    END
                    ''',
                    lexer=lexer, tracking=False)
 
