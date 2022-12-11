@@ -17,11 +17,11 @@ reserved_words = {
 }
 
 tokens = ['IDENTIFIER', 'MINUS', 'EQUALS', 'COLON', 'REL_OP', 'AND_OR',
-          'TIMES', 'PLUS', 'DIVIDE', 'OPEN_PAR', 'CLOSE_PAR', 'NUM'] + list(reserved_words.values())
+          'TIMES', 'PLUS', 'DIVIDE', 'POWER', 'OPEN_PAR', 'CLOSE_PAR', 'NUM'] + list(reserved_words.values())
 
 precedence = (
     ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE'),
+    ('left', 'TIMES', 'DIVIDE', 'POWER'),
 )
 
 # Ignored characters
@@ -29,6 +29,7 @@ t_ignore = ' \t'
 t_PLUS = '\+'
 t_TIMES = '\*'
 t_DIVIDE = '\/'
+t_POWER = '\^'
 t_AND_OR = '\&&|\|\|'
 t_REL_OP = '\==|\<=|>=|!=|>|<'
 t_MINUS = '-'
@@ -187,7 +188,7 @@ def p_bool_expression_bool_expression(p):
 
 def p_bool_expression_identifier(p):
     '''bool_expression : COLON IDENTIFIER'''
-    p[0] = [f"load {p[2]}"]
+    p[0] = [f"LOAD {p[2]}"]
 
 
 def p_num_expression(p):
@@ -195,16 +196,14 @@ def p_num_expression(p):
                       | num_expression MINUS num_expression
                       | num_expression TIMES num_expression
                       | num_expression DIVIDE num_expression
+                      | num_expression POWER num_expression
     '''
-    node = new_node("num_expression")
-    append_node(node, p[1])
-    append_node(node, new_leaf(p.slice[2].type, value=p[2]))
-    append_node(node, p[3])
     p[0] = p[1] + p[3] + [{
         "+": "ADD",
         "*": "MUL",
         "-": "SUB",
-        "/": "DIV"
+        "/": "DIV",
+        "^": "POW"
     }[p[2]]]
 
 
@@ -222,19 +221,19 @@ def p_num_expression_minus(p):
     node = new_node("num_expression")
     append_node(node, new_leaf(p.slice[1].type, value=p[1]))
     append_node(node, p[2])
-    p[0] = [f"push -{p[1]}"]
+    p[0] = [f"PUSH -{p[1]}"]
 
 
 def p_num_expression_num(p):
     '''num_expression : NUM'''
     node = new_node("num_expression")
     append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    p[0] = [f"push {p[1]}"]
+    p[0] = [f"PUSH {p[1]}"]
 
 
 def p_num_expression_identifier(p):
     '''num_expression : COLON IDENTIFIER'''
-    p[0] = [f"load {p[2]}"]
+    p[0] = [f"LOAD {p[2]}"]
 
 
 def p_func(p):
@@ -312,9 +311,9 @@ lexer = lex()
 parser = yacc()
 
 ast = parser.parse('''
-                    a = 2
-                    b = :a + 3
-                    WRITE :b
+                    b = 3
+                    a = :b ^ 2
+                    WRITE :a
                    ''',
                    lexer=lexer, tracking=False)
 
@@ -323,14 +322,14 @@ data = ['.DATA']
 for symbol in symbol_table:
     if (symbol_table.get(symbol).get('id_type') == 'var'):
         value = symbol_table.get(symbol).get("value")
-        data.append(f"{symbol} {0}")
+        data.append(f"{symbol} {value if value.isdecimal() else 0}")
 
 code = ['.CODE', 'def __main__:']
 halt = ["HALT"]
 
 tudo = start + data + code + ast + halt
 print(yaml.dump(tudo, sort_keys=False, indent=2))
-file = open("myfile.txt", 'w')
+file = open("../logovm/examples/teste.lasm", 'w')
 
 for x in tudo:
-    file.write(x.upper() + '\n')
+    file.write(x + '\n')
