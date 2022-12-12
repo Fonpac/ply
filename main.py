@@ -320,16 +320,22 @@ def p_if(p):
     # append_node(node, new_leaf(p.slice[8].type, value=p[8]))
     hash = random.getrandbits(128)
     if_name = f":ifjump_{hash}"
+    hash_from_else = None
+    if p[7]:
+        hash_from_else = p[7][1]
+    else:
+        hash_from_else = hash
+    print(hash_from_else)
     symbol_table[if_name] = {
         "id_type": "if_statement",
         "if_name": if_name,
-        'statement': p[6]
+        'statement': p[6] + [f"\tJP :continue_{hash_from_else}"]
     }
     p[3][2] = p[3][2] + " " + if_name
     if p[7]:
-        p[0] = p[3] + p[7]
+        p[0] = p[3] + [p[7][0]] + [f":continue_{hash_from_else}"]
     else:
-        p[0] = p[3]
+        p[0] = p[3] + [f":continue_{hash_from_else}"]
 
 def p_possible_else(p):
     '''possible_else : ELSE statement
@@ -345,9 +351,9 @@ def p_possible_else(p):
         symbol_table[else_name] = {
             "id_type": "if_statement",
             "if_name": else_name,
-            'statement': p[2]
+            'statement': p[2] + [f"\tJP :continue_{hash}"]
         }
-        p[0] = [f"\tJP {else_name}"]
+        p[0] = [f"\tJP {else_name}"] + [hash]
     else:
         p[0] = []
 
