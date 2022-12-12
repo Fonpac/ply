@@ -18,7 +18,7 @@ reserved_words = {
 }
 
 tokens = ['IDENTIFIER', 'MINUS', 'EQUALS', 'COLON', 'REL_OP', 'AND_OR',
-          'TIMES', 'PLUS', 'DIVIDE', 'POWER', 'OPEN_PAR', 'CLOSE_PAR', 'NUM'] + list(reserved_words.values())
+          'TIMES', 'PLUS', 'DIVIDE', 'POWER', 'OPEN_PAR', 'CLOSE_PAR', 'NUM'] + list(set(reserved_words.values()))
 
 precedence = (
     ('left', 'PLUS', 'MINUS'),
@@ -176,7 +176,7 @@ def p_bool_expression_rel_op(p):
     elif p[2] == "!=":
         jump_value = "JNZ"
     num_value = p[3][0].split()[1]
-    p[0] = p[1] + [f"CMP {num_value}"] + [jump_value]
+    p[0] = p[1] + [f"\tCMP {num_value}"] + [f"\t{jump_value}"]
 
 
 def p_bool_expression_and_or(p):
@@ -246,7 +246,6 @@ def p_func(p):
         if 'LOAD' in statement:
             splitted = statement.split(' ')
             real_value = None
-            print(statement)
             for arg in args:
                 if splitted[1] == arg.split('_')[1]:
                     real_value = arg
@@ -353,9 +352,12 @@ lexer = lex()
 parser = yacc()
 
 ast = parser.parse('''
-                    IF (2 > 1) THEN
-                        3 + 3
+                    TO SUM (a b)
+                        c = :a + :b
+                        WRITE :c
                     END
+
+                    SUM 6 7
                    ''',
                    lexer=lexer, tracking=False)
 
@@ -380,7 +382,6 @@ code = ["", '.CODE', 'def __main__:']
 halt = ["\tHALT"]
 
 logo_code = start + data + code + ast + halt + funcs
-print(yaml.dump(logo_code, sort_keys=False, indent=2))
 file = open("./teste.lasm", 'w')
 
 for x in logo_code:

@@ -1,0 +1,27 @@
+.START __main__
+
+.DATA
+	c 0
+	SUM_a 0
+	SUM_b 0
+	SUM_c 0
+
+.CODE
+def __main__:
+	PUSH 6
+	STOR SUM_a
+	PUSH 7
+	STOR SUM_b
+	CALL SUM
+	HALT
+
+
+def SUM:
+	LOAD SUM_a
+	LOAD SUM_b
+	ADD
+	STOR SUM_c
+	LOAD SUM_c
+	PUSH 1
+	CALL WRITE
+	RET
