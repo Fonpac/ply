@@ -325,7 +325,6 @@ def p_if(p):
         hash_from_else = p[7][1]
     else:
         hash_from_else = hash
-    print(hash_from_else)
     symbol_table[if_name] = {
         "id_type": "if_statement",
         "if_name": if_name,
