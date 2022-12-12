@@ -1,7 +1,7 @@
 from ply.lex import lex
 from ply.yacc import yacc
 import yaml
-from datetime import datetime
+import random
 import re
 
 from node import new_leaf, new_node, append_node
@@ -309,35 +309,47 @@ def p_call_func(p):
 
 def p_if(p):
     '''if : IF OPEN_PAR bool_expression CLOSE_PAR THEN statement possible_else END'''
-    node = new_node("if")
-    append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    append_node(node, new_leaf(p.slice[2].type, value=p[2]))
-    append_node(node, p[3])
-    append_node(node, new_leaf(p.slice[4].type, value=p[4]))
-    append_node(node, new_leaf(p.slice[5].type, value=p[5]))
-    append_node(node, p[6])
-    append_node(node, p[7])
-    append_node(node, new_leaf(p.slice[8].type, value=p[8]))
-    now = datetime.now().strftime("%d/%m/%Y%H:%M:%S")
-    if_name = f":ifjump_{now}"
-    symbol_table[p[2]] = {
+    # node = new_node("if")
+    # append_node(node, new_leaf(p.slice[1].type, value=p[1]))
+    # append_node(node, new_leaf(p.slice[2].type, value=p[2]))
+    # append_node(node, p[3])
+    # append_node(node, new_leaf(p.slice[4].type, value=p[4]))
+    # append_node(node, new_leaf(p.slice[5].type, value=p[5]))
+    # append_node(node, p[6])
+    # append_node(node, p[7])
+    # append_node(node, new_leaf(p.slice[8].type, value=p[8]))
+    hash = random.getrandbits(128)
+    if_name = f":ifjump_{hash}"
+    symbol_table[if_name] = {
         "id_type": "if_statement",
         "if_name": if_name,
         'statement': p[6]
     }
     p[3][2] = p[3][2] + " " + if_name
-    p[0] = p[3]
-
+    if p[7]:
+        p[0] = p[3] + p[7]
+    else:
+        p[0] = p[3]
 
 def p_possible_else(p):
-    '''possible_else : ELSE statement END
+    '''possible_else : ELSE statement
                      | empty'''
-    node = new_node("possible_else")
+    # node = new_node("possible_else")
+    # if p[2]:
+    #     append_node(node, new_leaf(p.slice[1].type, value=p[1]))
+    #     append_node(node, p[2])
+    #     append_node(node, new_leaf(p.slice[3].type, value=p[3]))
     if p[1]:
-        append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-        append_node(node, p[2])
-        append_node(node, new_leaf(p.slice[3].type, value=p[3]))
-    p[0] = node
+        hash = random.getrandbits(128)
+        else_name = f":elsejump_{hash}"
+        symbol_table[else_name] = {
+            "id_type": "if_statement",
+            "if_name": else_name,
+            'statement': p[2]
+        }
+        p[0] = [f"\tJP {else_name}"]
+    else:
+        p[0] = []
 
 
 def p_empty(p):
@@ -380,7 +392,6 @@ for symbol in symbol_table:
 
 code = ["", '.CODE', 'def __main__:']
 halt = ["\tHALT"]
-
 logo_code = start + data + code + ast + halt + funcs
 file = open("./teste.lasm", 'w')
 
