@@ -315,7 +315,7 @@ def p_call_func(p):
             func_execution.append(f"\tSTOR {func['args'][i]}")
         func_execution += [f'\tCALL {p[1]}']
         p[0] = func_execution
-    if func['id_type'] == 'move_function':
+    elif func['id_type'] == 'move_function':
         
         ang = p[2][0].split()[1]
         asd = p[2][1].split()[1]
@@ -389,13 +389,14 @@ parser = yacc()
 #     WRITE: counter
 # END
 ast = parser.parse('''
-                    c = 0
-                    IF (2 > 1) THEN
-                        c = 2 + 2
-                    ELSE
-                        c = 1 + 1
+                    TO SUM (a b)
+                        c = :a + :b
+                        WRITE :c
                     END
-                    WRITE :c
+
+                    SUM 5 6
+
+                   
                    ''',
                    lexer=lexer, tracking=False)
 
