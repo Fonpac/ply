@@ -319,8 +319,9 @@ def p_call_func(p):
         
         ang = p[2][0].split()[1]
         len = p[2][1].split()[1]
-        print(p[2])
-        p[0] = p[2] + func['value'](ang,len)
+        p[2].pop(0)
+        p[2].pop(0)
+        p[0] = func['value'](ang,len) + p[2]
     else:
         p[0] = p[2] + func['value'](len(p[2]))
 
@@ -388,11 +389,10 @@ parser = yacc()
 #     WRITE: counter
 # END
 ast = parser.parse('''
-                    value = 2
-                    WHILE (:value != 4)
-                        value = :value + 1
-                        WRITE :value
-                    END
+                    FD 0 2
+                    FD 90 2
+                    FD 180 2
+                    FD 270 2
                    ''',
                    lexer=lexer, tracking=False)
 
