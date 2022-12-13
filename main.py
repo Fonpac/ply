@@ -14,7 +14,8 @@ reserved_words = {
     'END': 'END',
     'IF': 'IF',
     'THEN': 'THEN',
-    'ELSE': 'ELSE'
+    'ELSE': 'ELSE',
+    'WHILE': 'WHILE'
 }
 
 tokens = ['IDENTIFIER', 'MINUS', 'EQUALS', 'COLON', 'REL_OP', 'AND_OR',
@@ -39,6 +40,7 @@ t_COLON = ':'
 t_NOT = 'NOT'
 t_TO = 'TO'
 t_END = 'END'
+t_WHILE = 'WHILE'
 t_OPEN_PAR = '\('
 t_CLOSE_PAR = '\)'
 
@@ -119,8 +121,28 @@ def p_statement(p):
     '''statement : assign
                  | expression
                  | if
+                 | while
     '''
     p[0] = p[1]
+
+
+def p_while(p):
+    '''while : WHILE OPEN_PAR bool_expression CLOSE_PAR program END'''
+    hash = random.getrandbits(128)
+    p[3][-1] = {
+        "JLESS": "\tJMORE",
+        "JMORE": "\tJLESS",
+        "JNZ": "\tJZ",
+        "JZ": "\tJNZ",
+    }[p[3][-1].strip()]
+    p[3][-1] = f'{p[3][-1]} :after_{hash}'
+    while_statement = []
+    while_statement.append(f':while_{hash}')
+    while_statement += p[3]
+    while_statement += p[5]
+    while_statement.append(f'\tJP :while_{hash}')
+    while_statement.append(f':after_{hash}')
+    p[0] = while_statement
 
 
 def p_assign(p):
@@ -153,44 +175,28 @@ def p_expression(p):
 
 def p_bool_expression_bool(p):
     '''bool_expression : BOOL'''
-    node = new_node("bool_expression")
-    append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    p[0] = node
+    p[0] = p[1]
 
 
 def p_bool_expression_not(p):
     '''bool_expression : NOT bool_expression'''
-    node = new_node("bool_expression")
-    append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    append_node(node, p[2])
-    p[0] = node
+    p[0] = ['NOT'] + p[2]
 
 
 def p_bool_expression_rel_op(p):
     '''bool_expression : num_expression REL_OP num_expression'''
-    node = new_node("bool_expression")
-    append_node(node, p[1])
-    append_node(node, new_leaf(p.slice[2].type, value=p[2]))
-    append_node(node, p[3])
-    jump_value = ""
-    if p[2] == ">":
-        jump_value = "JMORE"
-    elif p[2] == "<":
-        jump_value = "JLESS"
-    elif p[2] == "==":
-        jump_value = "JZ"
-    elif p[2] == "!=":
-        jump_value = "JNZ"
+    jump_value = {
+        ">": "JMORE",
+        "<": "JLESS",
+        "==": "JZ",
+        "!=": "JNZ",
+    }[p[2]]
     num_value = p[3][0].split()[1]
     p[0] = p[1] + [f"\tCMP {num_value}"] + [f"\t{jump_value}"]
 
 
 def p_bool_expression_and_or(p):
     '''bool_expression : bool_expression AND_OR bool_expression'''
-    node = new_node("bool_expression")
-    append_node(node, p[1])
-    append_node(node, new_leaf(p.slice[2].type, value=p[2]))
-    append_node(node, p[3])
     p[0] = p[1] + p[3]
 
 
@@ -352,11 +358,6 @@ def p_if(p):
 def p_possible_else(p):
     '''possible_else : ELSE statement
                      | empty'''
-    # node = new_node("possible_else")
-    # if p[2]:
-    #     append_node(node, new_leaf(p.slice[1].type, value=p[1]))
-    #     append_node(node, p[2])
-    #     append_node(node, new_leaf(p.slice[3].type, value=p[3]))
     if p[1]:
         hash = random.getrandbits(128)
         else_name = f":elsejump_{hash}"
@@ -381,13 +382,17 @@ lexer = lex()
 # Build the parser
 parser = yacc()
 
+# counter = 0
+# WHILE(:counter < 3)
+#     counter = :counter + 1
+#     WRITE: counter
+# END
 ast = parser.parse('''
-                    TO SUM (a b)
-                        c = :a + :b
-                        WRITE :c
+                    value = 2
+                    WHILE (:value != 4)
+                        value = :value + 1
+                        WRITE :value
                     END
-
-                    SUM 6 7
                    ''',
                    lexer=lexer, tracking=False)
 
@@ -407,6 +412,9 @@ for symbol in symbol_table:
         statement = symbol_table.get(symbol).get("statement")
         if_name = symbol_table.get(symbol).get("if_name")
         funcs += [if_name] + statement
+
+if len(data) == 2:
+    data = []
 
 code = ["", '.CODE', 'def __main__:']
 halt = ["\tHALT"]
