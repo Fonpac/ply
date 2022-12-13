@@ -318,10 +318,10 @@ def p_call_func(p):
     if func['id_type'] == 'move_function':
         
         ang = p[2][0].split()[1]
-        len = p[2][1].split()[1]
+        asd = p[2][1].split()[1]
         p[2].pop(0)
         p[2].pop(0)
-        p[0] = func['value'](ang,len) + p[2]
+        p[0] = func['value'](ang,asd) + p[2]
     else:
         p[0] = p[2] + func['value'](len(p[2]))
 
@@ -389,10 +389,13 @@ parser = yacc()
 #     WRITE: counter
 # END
 ast = parser.parse('''
-                    FD 0 2
-                    FD 90 2
-                    FD 180 2
-                    FD 270 2
+                    c = 0
+                    IF (2 > 1) THEN
+                        c = 2 + 2
+                    ELSE
+                        c = 1 + 1
+                    END
+                    WRITE :c
                    ''',
                    lexer=lexer, tracking=False)
 
