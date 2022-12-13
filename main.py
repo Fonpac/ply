@@ -46,11 +46,17 @@ t_CLOSE_PAR = '\)'
 def write_function(length):
     return [f'\tPUSH {length}', f'\tCALL WRITE']
 
+def move_function(ang, length):
+    return [f'\tPUSH {ang}', f'\tPUSH {length}', f'\tCALL MOVE']
 
 symbol_table = {
     'WRITE': {
         'value': write_function,
         'id_type': 'function'
+    },
+    'FD': {
+        'value': move_function,
+        'id_type': 'move_function'
     }
 }
 
@@ -303,6 +309,12 @@ def p_call_func(p):
             func_execution.append(f"\tSTOR {func['args'][i]}")
         func_execution += [f'\tCALL {p[1]}']
         p[0] = func_execution
+    if func['id_type'] == 'move_function':
+        
+        ang = p[2][0].split()[1]
+        len = p[2][1].split()[1]
+        print(p[2])
+        p[0] = p[2] + func['value'](ang,len)
     else:
         p[0] = p[2] + func['value'](len(p[2]))
 
@@ -335,6 +347,7 @@ def p_if(p):
         p[0] = p[3] + [p[7][0]] + [f":continue_{hash_from_else}"]
     else:
         p[0] = p[3] + [f":continue_{hash_from_else}"]
+
 
 def p_possible_else(p):
     '''possible_else : ELSE statement
@@ -398,6 +411,7 @@ for symbol in symbol_table:
 code = ["", '.CODE', 'def __main__:']
 halt = ["\tHALT"]
 logo_code = start + data + code + ast + halt + funcs
+
 file = open("./teste.lasm", 'w')
 
 for x in logo_code:
